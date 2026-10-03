@@ -56,3 +56,5 @@ Browser suites cover cross-device vault saves, separate identities, wrong-passwo
 ## Dependency changes
 
 Commit the matching lockfile whenever changing dependencies. The original manifests contain a few broad development-tool ranges; `npm ci` still installs exact locked versions. Review Electron and Worker runtime upgrades independently before distribution. The package versions identify source compatibility and are not evidence that a Store submission has been approved.
+
+The desktop manifest pins the transitive `@electron/osx-sign` dependency to 2.7.1 because the previously cached 2.9.0 archive is no longer available from npm. This stays within the packager's compatible range and keeps fresh installations reproducible. The shipping desktop target remains Windows.

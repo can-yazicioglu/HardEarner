@@ -32,5 +32,8 @@
   },
   "engines": {
     "node": ">=24.0.0 <25"
+  },
+  "overrides": {
+    "@electron/osx-sign": "2.7.1"
   }
 }
