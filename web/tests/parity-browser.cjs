@@ -4,7 +4,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const url='http://127.0.0.1:8794',password='Parity fixture password 2026',newPassword='Rotated fixture password 2026';
 const out=path.resolve('../.artifacts/screenshots');
 async function unlock(p,pwd=password){await p.getByLabel(/^(Kasa şifresi|Vault password)$/).fill(pwd);const confirm=p.getByLabel(/^(Kasa şifresini tekrarla|Confirm vault password)$/);if(await confirm.isVisible()){await confirm.fill(pwd);await p.getByRole('button',{name:/^(Özel kasayı oluştur|Create private vault)$/}).click()}else await p.getByRole('button',{name:/^(Kasayı aç|Unlock vault)$/}).click();await p.locator('.private-toolbar').waitFor()}
-async function run(engine,name){const browser=await engine.launch({headless:true});const errors=[];let p;
+async function run(engine,name){const browser=await engine.launch({headless:true});const errors=[];let p,phase='bootstrap';
  try{
   const a=await browser.newContext({viewport:{width:1440,height:1000}}),b=await browser.newContext({viewport:{width:1440,height:1000}});
   const sockets=[];let outage=false;
@@ -21,7 +21,7 @@ async function run(engine,name){const browser=await engine.launch({headless:true
     return route.fulfill({json:{value:80000,at:now,rates:{USD:1,TRY:49,GBP:.75,EUR:.87},date:'2026-10-02'}});
    });
   }
-  p=await a.newPage();const q=await b.newPage();for(const page of [p,q]){page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push({message:e.message,stack:e.stack,url:page.url()}))}
+  p=await a.newPage();const q=await b.newPage();for(const page of [p,q]){page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push({phase,message:e.message,stack:e.stack,url:page.url()}))}
   await p.goto(url);await unlock(p);await p.locator('.language-select').selectOption('en');await p.waitForFunction(async()=>(await hardearner.load()).state.settings.language==='en');
   // The browser supplies every method consumed by the shared desktop renderer.
   const preload=fs.readFileSync('../desktop/electron/preload.cjs','utf8');const methods=[...preload.matchAll(/(?:\{|,)(\w+):(?:receive|\(?\w*)/g)].map(m=>m[1]).filter(k=>!['status'].includes(k));
@@ -30,33 +30,43 @@ async function run(engine,name){const browser=await engine.launch({headless:true
   await p.reload();await unlock(p);await p.waitForFunction(async()=>(await hardearner.load()).market.crypto.BTC?.usd===80000);
   const m=await p.evaluate(()=>hardearner.refresh());assert.equal(m.crypto.BTC.usd,80000);await p.screenshot({path:path.join(out,'HardEarner-gallery-holdings-'+name+'.png'),animations:'disabled'});
   const snap=await p.evaluate(()=>hardearner.snapshot());const expected=8000+5*3600/31.1034768;assert(Math.abs(snap.snapshots.at(-1).usd-expected)<.01);assert(Math.abs(snap.snapshots.at(-1).try-expected*49)<.1);assert(Math.abs(snap.snapshots.at(-1).eur-expected*.87)<.01);
+  phase='csv';
   // CSV contains all desktop accounting and source columns.
   const [dl]=await Promise.all([p.waitForEvent('download'),p.getByRole('button',{name:'Export CSV',exact:true}).click()]);const csv=fs.readFileSync(await dl.path(),'utf8');assert(csv.includes('Sale P/L'));assert(csv.includes('Physical'));assert(csv.includes('Test wallet'));
   await p.getByRole('button',{name:'Dismiss notification',exact:true}).click();
+  phase='outage';
   outage=true;const failed=await p.evaluate(()=>hardearner.refresh());assert.equal(failed.crypto.BTC.usd,80000);assert.equal(failed.status.crypto.ok,false);outage=false;await p.evaluate(()=>hardearner.refresh());
-  const parent=p,child=a.waitForEvent('page');await p.locator('.sidebar').getByRole('button',{name:'Self Analysis',exact:true}).click();p=await child;const researchPage=p;p.on('pageerror',e=>errors.push({message:e.message,stack:e.stack,url:researchPage.url()}));await p.waitForLoadState();await unlock(p);await p.getByRole('button',{name:'Charts',exact:true}).click();await p.locator('.analysis-chart-panel[data-last-price]').first().waitFor();
+  phase='research';
+  const parent=p,child=a.waitForEvent('page');await p.locator('.sidebar').getByRole('button',{name:'Self Analysis',exact:true}).click();p=await child;const researchPage=p;p.on('pageerror',e=>errors.push({phase,message:e.message,stack:e.stack,url:researchPage.url()}));await p.waitForLoadState();await unlock(p);await p.getByRole('button',{name:'Charts',exact:true}).click();await p.locator('.analysis-chart-panel[data-last-price]').first().waitFor();
   await p.getByLabel('Horizontal line 1',{exact:true}).click();await p.locator('.drawing-input').first().click({position:{x:180,y:150}});await p.locator('.drawing-overlay line').first().waitFor({state:'attached'});assert(await p.locator('.drawing-overlay line').first().evaluate(n=>n.getBoundingClientRect().width>100&&Number(n.getAttribute('y1'))>0));
   await p.getByLabel('Freehand pen 1',{exact:true}).click();const box=await p.locator('.drawing-input').first().boundingBox();await p.mouse.move(box.x+180,box.y+180);await p.mouse.down();await p.mouse.move(box.x+230,box.y+150,{steps:10});await p.mouse.move(box.x+280,box.y+200,{steps:10});await p.mouse.up();await p.locator('.drawing-overlay polyline[data-drawing-id]').waitFor();
   await p.getByLabel('Pan / crosshair 1',{exact:true}).click();assert(sockets.length);
   const now=Date.now();sockets.at(-1).send(JSON.stringify({e:'aggTrade',s:'BTCUSDT',p:'80055',q:'0.1',a:501,T:now}));await p.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel').dataset.liveUpdates)>0);assert.equal(Number(await p.locator('.analysis-chart-panel').first().getAttribute('data-last-price')),80055);
   await p.getByRole('button',{name:'Price alerts',exact:true}).click();await p.getByRole('button',{name:'Import USD alerts',exact:true}).click();await p.getByLabel('Price alert table').fill('Asset,Buy below,Sell above\nBTC,81000,90000');await p.getByRole('button',{name:'Preview alerts',exact:true}).click();await p.getByRole('button',{name:'Arm all alerts (2)',exact:true}).click();await p.getByRole('dialog').waitFor({state:'hidden'});assert.equal((await p.evaluate(()=>hardearner.analysisLoad())).alerts.length,2);
   await p.evaluate(()=>window.scrollTo(0,0));await p.mouse.move(50,50);await p.screenshot({path:path.join(out,'HardEarner-web-parity-'+name+'-analysis.png'),animations:'disabled'});
+  phase='research close';
   await p.close();p=parent;await p.evaluate(()=>hardearner.loadCloudChanges());
+  phase='routes';
   // Every route at phone, tablet and laptop widths: navigation and top-level overflow.
   const routes=['Holdings','Accounts','Crypto','Stocks & funds','Precious Metals','Currencies','Watchlist','FAQ','Customer service','Learn FAST','Settings & data'];
   for(const width of [390,768,1024,1440]){await p.setViewportSize({width,height:1000});for(const route of routes){if(width<761)await p.getByRole('button',{name:'Navigation menu',exact:true}).click();await p.locator('.sidebar').getByRole('button',{name:route,exact:true}).click();await p.waitForFunction(title=>document.querySelector('.page-heading h1')?.textContent===title,route==='Settings & data'?'Settings':route==='Learn FAST'?'Learn how to use HardEarner FAST':route);if(width<761)await p.waitForFunction(()=>document.querySelector('.sidebar').getBoundingClientRect().right<=1);assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),name+' overflow '+route+' '+width);assert(await p.locator('.private-toolbar').isVisible());if(route==='Learn FAST')assert.equal(await p.locator('.fast-step').count(),30);if(width===390&&route==='Holdings')await p.screenshot({path:path.join(out,'HardEarner-gallery-mobile-'+name+'.png'),animations:'disabled'})}if(width===390)await p.screenshot({path:path.join(out,'HardEarner-web-parity-'+name+'-phone.png'),fullPage:true,animations:'disabled'})}
   await p.getByLabel('Search FAQ').count();
+  phase='backup';
   // A full backup includes real encrypted analysis, not just the manual JSON.
   const [full]=await Promise.all([p.waitForEvent('download'),p.getByRole('button',{name:'Download full vault backup',exact:true}).click()]);const backup=JSON.parse(fs.readFileSync(await full.path(),'utf8'));assert(!JSON.stringify(backup).includes('Test wallet'));
   await q.goto(url);await unlock(q);assert.equal((await q.evaluate(()=>hardearner.load())).state.holdings.length,2);
+  phase='password rotation';
   await p.evaluate(async({old,next})=>hardearner.authChange(old,next,next),{old:password,next:newPassword});await q.evaluate(()=>hardearner.loadCloudChanges());assert((await q.evaluate(()=>hardearner.authStatus())).locked);await unlock(q,newPassword);
   await p.evaluate(()=>hardearner.authLock());await unlock(p,newPassword);assert.equal((await p.evaluate(()=>hardearner.load())).state.holdings.length,2);
+  phase='restore';
   const wrong=await p.evaluate(async({backup,pwd})=>{try{await hardearner.inspectVaultBackup(backup,pwd);return false}catch{return true}},{backup,pwd:newPassword});assert(wrong,'Old backups keep their original password');
   const preview=await p.evaluate(({backup,pwd})=>hardearner.inspectVaultBackup(backup,pwd),{backup,pwd:password});assert.equal(preview.drawings,2);assert.equal(preview.alerts,2);
   await p.evaluate(async()=>{const {state}=await hardearner.load();state.holdings=[];await hardearner.save(state)});await p.evaluate(token=>hardearner.restoreVaultBackup(token),preview.token);assert.equal((await p.evaluate(()=>hardearner.load())).state.holdings.length,2);assert(await p.evaluate(()=>hardearner.previousVault()));
   await p.evaluate(()=>Promise.all([hardearner.saveSetting('currency','EUR'),hardearner.saveSetting('hideBalances',true)]));const settings=(await p.evaluate(()=>hardearner.load())).state.settings;assert.equal(settings.currency,'EUR');assert.equal(settings.hideBalances,true);
+  phase='interrupted rotation';
   // An interrupted password rotation remains recoverable with its intended password.
   await p.route('**/api/vault',r=>r.request().method()==='PUT'?r.abort():r.continue());const newer='Second rotated fixture password';assert(await p.evaluate(async({old,next})=>{try{await hardearner.authChange(old,next,next);return false}catch{return true}},{old:newPassword,next:newer}));await p.unroute('**/api/vault');await p.reload();await unlock(p,newPassword);assert((await p.evaluate(()=>hardearner.cloudStatus())).pendingPassword);await p.evaluate(pwd=>hardearner.recoverPending('retry',pwd),newer);await p.reload();await unlock(p,newer);
+  phase='lock during refresh';
   // Late refresh completion must not repopulate a locked session.
   let release;const waiting=new Promise(r=>release=r);await p.route('**/api/market',async r=>{await waiting;try{await r.fulfill({json:{fx:{USD:1,TRY:49,GBP:.75,EUR:.87},crypto:{BTC:{usd:80000}},metals:{},status:{crypto:{ok:true}}}})}catch{}});const inFlight=p.waitForRequest('**/api/market');await p.evaluate(()=>{window.fixtureRefresh=hardearner.refresh().catch(e=>e.message)});await inFlight;await p.evaluate(()=>hardearner.authLock());release();await p.evaluate(()=>window.fixtureRefresh);assert((await p.evaluate(()=>hardearner.authStatus())).locked);assert(await p.evaluate(async()=>{try{await hardearner.load();return false}catch{return true}}));await p.unroute('**/api/market');
   assert.deepEqual(errors,[]);console.log('PASS '+name+': 11 portfolio routes × 4 widths, desktop API parity, currency snapshots, complete CSV, quote outage retention, visible lines/pen, streamed candle updates, USD alerts, full encrypted restore, password rotation across devices, interrupted rotation recovery, in-flight lock safety.');
