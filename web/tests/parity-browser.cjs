@@ -27,7 +27,7 @@ async function run(engine,name){const browser=await engine.launch({headless:true
   const preload=fs.readFileSync('../desktop/electron/preload.cjs','utf8');const methods=[...preload.matchAll(/(?:\{|,)(\w+):(?:receive|\(?\w*)/g)].map(m=>m[1]).filter(k=>!['status'].includes(k));
   const exposed=await p.evaluate(()=>Object.keys(hardearner));for(const key of methods)assert(exposed.includes(key),'Missing desktop API: '+key);
   await p.evaluate(async()=>{const {state}=await hardearner.load();state.settings.currency='TRY';state.holdings=[{id:'fixture-gold',type:'metal',asset:'XAU',name:'Gold',quantity:5,purity:1,storageType:'physical',location:'Physical',cost:15000,costCurrency:'TRY',purchaseFee:25,purchaseDate:'2026-09-01',purchaseFx:{USD:1/49,TRY:1,GBP:.75/49,EUR:.87/49}},{id:'fixture-btc',type:'crypto',asset:'BTC',name:'Bitcoin',quantity:.1,storageType:'wallet',location:'Test wallet',cost:7000,costCurrency:'USD',purchaseFee:5,purchaseDate:'2026-09-22',purchaseFx:{USD:1,TRY:49,GBP:.75,EUR:.87}}];await hardearner.save(state)});
-  await p.reload();await unlock(p);await p.waitForFunction(async()=>(await hardearner.load()).market.crypto.BTC?.usd===80000);
+  await p.evaluate(()=>hardearner.refresh());await p.reload();await unlock(p);await p.waitForFunction(async()=>(await hardearner.load()).market.crypto.BTC?.usd===80000);
   const m=await p.evaluate(()=>hardearner.refresh());assert.equal(m.crypto.BTC.usd,80000);await p.screenshot({path:path.join(out,'HardEarner-gallery-holdings-'+name+'.png'),animations:'disabled'});
   const snap=await p.evaluate(()=>hardearner.snapshot());const expected=8000+5*3600/31.1034768;assert(Math.abs(snap.snapshots.at(-1).usd-expected)<.01);assert(Math.abs(snap.snapshots.at(-1).try-expected*49)<.1);assert(Math.abs(snap.snapshots.at(-1).eur-expected*.87)<.01);
   phase='csv';
@@ -45,7 +45,8 @@ async function run(engine,name){const browser=await engine.launch({headless:true
   await p.getByRole('button',{name:'Price alerts',exact:true}).click();await p.getByRole('button',{name:'Import USD alerts',exact:true}).click();await p.getByLabel('Price alert table').fill('Asset,Buy below,Sell above\nBTC,81000,90000');await p.getByRole('button',{name:'Preview alerts',exact:true}).click();await p.getByRole('button',{name:'Arm all alerts (2)',exact:true}).click();await p.getByRole('dialog').waitFor({state:'hidden'});assert.equal((await p.evaluate(()=>hardearner.analysisLoad())).alerts.length,2);
   await p.evaluate(()=>window.scrollTo(0,0));await p.mouse.move(50,50);await p.screenshot({path:path.join(out,'HardEarner-web-parity-'+name+'-analysis.png'),animations:'disabled'});
   phase='research close';
-  await p.close();p=parent;await p.evaluate(()=>hardearner.loadCloudChanges());
+  // Settle the auto-refresh before destroying this document; lock cancellation is tested below.
+  await p.evaluate(()=>hardearner.refresh());await p.close();p=parent;await p.evaluate(()=>hardearner.loadCloudChanges());
   phase='routes';
   // Every route at phone, tablet and laptop widths: navigation and top-level overflow.
   const routes=['Holdings','Accounts','Crypto','Stocks & funds','Precious Metals','Currencies','Watchlist','FAQ','Customer service','Learn FAST','Settings & data'];
