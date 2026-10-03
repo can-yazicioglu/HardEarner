@@ -12,9 +12,9 @@
     "jose": "6.2.12"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "5.20260928.1",
+    "@cloudflare/workers-types": "5.20261003.1",
     "@types/node": "24.19.0",
-    "wrangler": "4.143.0"
+    "wrangler": "4.147.0"
   },
   "license": "UNLICENSED",
   "author": "Can Yazicioglu",

@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/media/banner.svg" alt="HardEarner — Hard-Earned Money needs attention." width="100%" /></p>
 
 <p align="center">
-  <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml/badge.svg" /></a>
+  <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://img.shields.io/badge/CI-GitHub_Actions-315f9f?logo=githubactions&amp;logoColor=white" /></a>
   <img alt="Status: Private preview" src="https://img.shields.io/badge/status-private_preview-263f68" />
   <img alt="Windows desktop 2.13.0" src="https://img.shields.io/badge/desktop-2.13.0-315f9f" />
   <img alt="Private web 2.13.1" src="https://img.shields.io/badge/web-2.13.1-315f9f" />
