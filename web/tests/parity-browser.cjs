@@ -11,6 +11,8 @@ async function run(engine,name){const browser=await engine.launch({headless:true
   for(const context of [a,b]){
    await context.addCookies([{name:'test-user',value:'parity-'+name+'-'+process.pid,url}]);
    await context.routeWebSocket(/wss:\/\//,ws=>{sockets.push(ws)});
+   // This is a deterministic vault/layout suite. Live public widgets are verified separately.
+   await context.route('https://www.tradingview-widget.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><body>Isolated market widget fixture</body>'}));
    await context.route('**/api/market',async route=>{const {op,args}=route.request().postDataJSON(),now=Date.now(),hour=Math.floor(now/3600000)*3600;
     if(op==='refresh')return route.fulfill({json:outage?{fx:{USD:1},crypto:{},metals:{},status:{fx:{ok:false,error:'Fixture outage'},crypto:{ok:false,error:'Fixture outage'},XAU:{ok:false,error:'Fixture outage'}}}:{fx:{USD:1,TRY:49,GBP:.75,EUR:.87},crypto:{BTC:{usd:80000,bidUSD:79950,change:1,at:new Date().toISOString()}},metals:{XAU:{usd:3600,at:new Date().toISOString()}},status:{crypto:{ok:true,at:new Date().toISOString()},fx:{ok:true},XAU:{ok:true}},fetchedAt:new Date().toISOString()}});
     if(op==='analysisHistory')return route.fulfill({json:{...args[0],bars:Array.from({length:500},(_,i)=>({time:hour-(499-i)*3600,open:79999+i/10,high:80005+i/10,low:79995+i/10,close:80000+i/10,volume:10})),source:'Synthetic parity fixture',fetchedAt:now}});
@@ -19,7 +21,7 @@ async function run(engine,name){const browser=await engine.launch({headless:true
     return route.fulfill({json:{value:80000,at:now,rates:{USD:1,TRY:49,GBP:.75,EUR:.87},date:'2026-10-02'}});
    });
   }
-  p=await a.newPage();const q=await b.newPage();for(const page of [p,q]){page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message))}
+  p=await a.newPage();const q=await b.newPage();for(const page of [p,q]){page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push({message:e.message,stack:e.stack,url:page.url()}))}
   await p.goto(url);await unlock(p);await p.locator('.language-select').selectOption('en');await p.waitForFunction(async()=>(await hardearner.load()).state.settings.language==='en');
   // The browser supplies every method consumed by the shared desktop renderer.
   const preload=fs.readFileSync('../desktop/electron/preload.cjs','utf8');const methods=[...preload.matchAll(/(?:\{|,)(\w+):(?:receive|\(?\w*)/g)].map(m=>m[1]).filter(k=>!['status'].includes(k));
@@ -32,7 +34,7 @@ async function run(engine,name){const browser=await engine.launch({headless:true
   const [dl]=await Promise.all([p.waitForEvent('download'),p.getByRole('button',{name:'Export CSV',exact:true}).click()]);const csv=fs.readFileSync(await dl.path(),'utf8');assert(csv.includes('Sale P/L'));assert(csv.includes('Physical'));assert(csv.includes('Test wallet'));
   await p.getByRole('button',{name:'Dismiss notification',exact:true}).click();
   outage=true;const failed=await p.evaluate(()=>hardearner.refresh());assert.equal(failed.crypto.BTC.usd,80000);assert.equal(failed.status.crypto.ok,false);outage=false;await p.evaluate(()=>hardearner.refresh());
-  const parent=p,child=a.waitForEvent('page');await p.locator('.sidebar').getByRole('button',{name:'Self Analysis',exact:true}).click();p=await child;p.on('pageerror',e=>errors.push(e.message));await p.waitForLoadState();await unlock(p);await p.getByRole('button',{name:'Charts',exact:true}).click();await p.locator('.analysis-chart-panel[data-last-price]').first().waitFor();
+  const parent=p,child=a.waitForEvent('page');await p.locator('.sidebar').getByRole('button',{name:'Self Analysis',exact:true}).click();p=await child;const researchPage=p;p.on('pageerror',e=>errors.push({message:e.message,stack:e.stack,url:researchPage.url()}));await p.waitForLoadState();await unlock(p);await p.getByRole('button',{name:'Charts',exact:true}).click();await p.locator('.analysis-chart-panel[data-last-price]').first().waitFor();
   await p.getByLabel('Horizontal line 1',{exact:true}).click();await p.locator('.drawing-input').first().click({position:{x:180,y:150}});await p.locator('.drawing-overlay line').first().waitFor({state:'attached'});assert(await p.locator('.drawing-overlay line').first().evaluate(n=>n.getBoundingClientRect().width>100&&Number(n.getAttribute('y1'))>0));
   await p.getByLabel('Freehand pen 1',{exact:true}).click();const box=await p.locator('.drawing-input').first().boundingBox();await p.mouse.move(box.x+180,box.y+180);await p.mouse.down();await p.mouse.move(box.x+230,box.y+150,{steps:10});await p.mouse.move(box.x+280,box.y+200,{steps:10});await p.mouse.up();await p.locator('.drawing-overlay polyline[data-drawing-id]').waitFor();
   await p.getByLabel('Pan / crosshair 1',{exact:true}).click();assert(sockets.length);
