@@ -1,0 +1,9 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),crypto=require('node:crypto'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');
+const {decryptEnvelope,readEncrypted}=require('../electron/encrypted-read.cjs');const {writeEncrypted}=require('../electron/encrypted-file.cjs');
+test('Paired key recovery authenticates AES-GCM, rejects wrong keys and clears unwrapped keys',()=>{
+ const key=crypto.randomBytes(32),iv=crypto.randomBytes(12),c=crypto.createCipheriv('aes-256-gcm',key,iv),text='{"connections":[]}';const body=Buffer.concat([c.update(text),c.final()]),bytes=Buffer.concat([Buffer.from('v10'),iv,body,c.getAuthTag()]);const env={os_crypt:{encrypted_key:Buffer.from('DPAPIwrapped').toString('base64')}};
+ let unwrapped;assert.equal(decryptEnvelope(bytes,env,()=>unwrapped=Buffer.from(key)),text);assert(unwrapped.every(x=>x===0));assert.throws(()=>decryptEnvelope(bytes,env,()=>crypto.randomBytes(32)));bytes[20]^=1;assert.throws(()=>decryptEnvelope(bytes,env,()=>Buffer.from(key)));assert.throws(()=>decryptEnvelope(Buffer.from('plaintext'),env,()=>key));
+});
+test('Normal encrypted reads do not use fallback, and migration backups retain the old matching envelope',()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'hardearner-paired-')),file=path.join(dir,'connections.encrypted'),safeStorage={isEncryptionAvailable:()=>true,encryptString:s=>Buffer.from(s),decryptString:b=>b.toString()};fs.writeFileSync(file,'original');fs.writeFileSync(file+'.key-envelope','old-envelope');fs.writeFileSync(path.join(dir,'Local State'),'current-envelope');assert.equal(readEncrypted(file,safeStorage).recovered,false);writeEncrypted(file,'new',safeStorage);assert.equal(fs.readFileSync(file+'.previous.key-envelope','utf8'),'old-envelope');assert.equal(readEncrypted(file,safeStorage).text,'new');assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).format,'hardearner-encrypted-v2');
+});

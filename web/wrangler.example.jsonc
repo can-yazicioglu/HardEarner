@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hardearner-private",
+  "main": "build/worker.mjs",
+  "compatibility_date": "2026-09-28",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": true },
+  "durable_objects": { "bindings": [{ "name": "VAULTS", "class_name": "UserVault" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["UserVault"] }],
+  "vars": {
+    "ACCESS_ISSUER": "https://your-team.cloudflareaccess.com",
+    "ACCESS_AUD": "",
+    "ALLOWED_EMAILS": "owner@example.com"
+  },
+  "observability": { "enabled": false }
+}

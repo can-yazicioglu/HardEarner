@@ -1,0 +1,8 @@
+// One IndexedDB per browser origin. Portfolio and analysis are stored locally.
+export function createStore(name='hardearner-mobile-v1'){
+ let opening;
+ const open=()=>opening||(opening=new Promise((resolve,reject)=>{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>r.result.createObjectStore('records');r.onsuccess=()=>{r.result.onversionchange=()=>r.result.close();resolve(r.result)};r.onerror=()=>reject(Error('Local storage could not be opened. Enable website storage and reload.'));r.onblocked=()=>reject(Error('Close other HardEarner tabs and reload.'))}));
+ async function read(key){const db=await open();return new Promise((resolve,reject)=>{const r=db.transaction('records').objectStore('records').get(key);r.onsuccess=()=>resolve(r.result||{revision:0,value:undefined});r.onerror=()=>reject(Error('Your saved data could not be read. It was not reset.'))})}
+ async function write(records){const db=await open();return new Promise((resolve,reject)=>{const tx=db.transaction('records','readwrite'),s=tx.objectStore('records'),revisions={};let error;for(const[key,value,expected,keepPrevious=true]of records){const r=s.get(key);r.onsuccess=()=>{const old=r.result||{revision:0};if(expected!=null&&expected!==old.revision){error=Error('Data changed in another tab. Reload before saving.');tx.abort();return}if(keepPrevious&&old.value!==undefined)s.put(old,key+'.previous');else if(!keepPrevious)s.delete(key+'.previous');const revision=old.revision+1;revisions[key]=revision;s.put({revision,value},key)}}tx.oncomplete=()=>resolve(revisions);tx.onabort=()=>reject(error||Error('Storage is full or unavailable. Your change was not saved.'));tx.onerror=()=>{error=error||Error('Storage is full or unavailable. Your change was not saved.')}})}
+ return{read,write};
+}

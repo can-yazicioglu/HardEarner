@@ -1,0 +1,6 @@
+{
+  "Encrypted cloud vault": {"tr": "Şifreli bulut kasası"},
+  "Checks every 30 seconds while this browser is visible, online and the vault is unlocked. Closing it stops alerts.": {"tr": "Bu tarayıcı görünür, çevrimiçi ve kasa açıkken 30 saniyede bir kontrol edilir. Tarayıcıyı kapatmak uyarıları durdurur."},
+  "A test message is shown inside HardEarner. Device notifications also depend on browser support and permission.": {"tr": "Test mesajı HardEarner içinde gösterilir. Cihaz bildirimi ayrıca tarayıcı desteğine ve iznine bağlıdır."},
+  "HardEarner drawings, notes and alerts are encrypted and synced to your private cloud vault.": {"tr": "HardEarner çizimleri, notları ve uyarıları şifrelenip özel bulut kasana eşitlenir."}
+}

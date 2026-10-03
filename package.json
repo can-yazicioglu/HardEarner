@@ -1,0 +1,18 @@
+{
+  "name": "hardearner",
+  "version": "2.13.1",
+  "private": true,
+  "description": "A shared wealth workspace for Windows and the private web.",
+  "author": "Can Yazicioglu",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=24.0.0 <25" },
+  "scripts": {
+    "setup": "node scripts/tasks.cjs setup",
+    "build": "node scripts/tasks.cjs build",
+    "test": "node scripts/tasks.cjs test",
+    "start:desktop": "node scripts/tasks.cjs desktop",
+    "demo:web": "node scripts/tasks.cjs demo",
+    "test:web-ui": "node scripts/web-ui.cjs",
+    "test:desktop-ui": "node scripts/tasks.cjs desktop-ui"
+  }
+}

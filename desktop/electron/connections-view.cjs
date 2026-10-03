@@ -1,0 +1,23 @@
+const {reconcileLots,lotCost}=require('./transaction-ledger.cjs');
+// Shared by the main process, Assets, totals and exports. No credentials or network code.
+function linkedHoldings(connections){const combined=connections.some(c=>c.history?.accountingVersion===2)?require('./portfolio-ledger.cjs').project(connections.filter(c=>c.kind!=='trading212')):null;return connections.filter(c=>c.included&&!c.sandbox).flatMap(c=>{
+ if(c.kind==='trading212')return(c.balances||[]).filter(b=>b.quantity!==0).map(b=>({id:'connected:'+c.id+':'+b.id,type:b.type,asset:b.asset,name:b.name,quantity:b.quantity,purity:1,location:c.label,connected:true,connectionId:c.id,sourceKind:c.kind,sourceLabel:c.label,availableQuantity:b.available,cost:b.type==='cash'?null:b.brokerCost,costCurrency:b.brokerCostCurrency||b.asset,purchaseDate:'',purchaseTime:null,purchaseFee:0,saleFee:0,saleFeePct:0,brokerPrice:b.brokerPrice,brokerPriceCurrency:b.brokerPriceCurrency,positionOpenedAt:b.positionOpenedAt,syncedAt:c.lastSync,isin:b.isin,costStatus:b.type==='cash'?'Cash balance':"Broker aggregate cost. Converted cost uses current FX; original fills are in Purchases.",notes:'Trading 212 authoritative position; uninvested Pie cash is included once.'}));
+ const allocations=combined?.allocations[c.id]||reconcileLots(c),offsets={},result=[];
+ for(const b of (c.balances||[]).filter(b=>b.quantity!==0)){
+  const common={type:b.type,asset:b.asset,name:b.name,quantity:b.quantity,purity:1,cost:null,costCurrency:b.asset,location:c.label+(b.wallet?' · '+b.wallet:''),connected:true,connectionId:c.id,availableQuantity:Math.max(0,Math.min(b.quantity,b.available??0)),purchaseDate:'',purchaseFee:0,saleFee:0,saleFeePct:0,quoteDate:'',syncedAt:c.lastSync,balanceAt:b.at||c.lastSync,sourceKind:c.kind,sourceLabel:c.label,notes:''};
+  let match=allocations[b.asset];const entered=c.acquisitions?.[b.asset],total=(c.balances||[]).filter(x=>x.asset===b.asset).reduce((s,x)=>s+x.quantity,0),manualCost=entered&&!entered.invalidatedAt&&!(match?.matched&&match.lots.every(l=>l.parts?.length&&!l.parts.some(p=>p.entry||p.estimated)))&&Math.abs(entered.quantity-total)<=Math.max(1e-12,total*1e-10);
+  if(manualCost)match={matched:true,lots:[{id:'acquisition:'+b.asset,asset:b.asset,quantity:total,time:Date.parse(entered.date),parts:[{amount:entered.cost,currency:entered.currency,date:entered.date}]}]};
+  else if(entered&&!match?.matched)match={...match,reason:'Balance changed; review your manually entered purchase details.'};
+  if(!match?.matched||b.quantity<=0){result.push({...common,id:'connected:'+c.id+':'+b.id,costStatus:match?.reason});continue;}
+  let skip=offsets[b.asset]||0,left=b.quantity;
+  for(const lot of match.lots){if(skip>=lot.quantity){skip-=lot.quantity;continue;}const q=Math.min(left,lot.quantity-skip);skip=0;if(q<=1e-12)continue;
+   const cost=lotCost(lot,manualCost?{fx:{[entered.currency+':'+entered.date]:{rates:entered.fx,date:entered.fxDate}}}:{...c.history,fx:combined?.fx||c.history?.fx}),fraction=q/lot.quantity;
+   const provenance=lot.provenance||[],entryEstimate=lot.parts?.some(p=>p.entry||p.estimated),origin=provenance.find(p=>p.kind==='trade');
+   result.push({...common,...cost,id:'connected:'+c.id+':'+b.id+':'+lot.id,quantity:q,cost:cost.cost==null?null:cost.cost*fraction,availableQuantity:common.availableQuantity*q/b.quantity,purchaseDate:lot.time?new Date(lot.time).toISOString().slice(0,10):'',purchaseTime:manualCost?null:lot.time,imported:!manualCost&&!!lot.time,manualAcquisition:!!manualCost,provenance,entryEstimate:!!entryEstimate,originPurchaseTime:origin?.time,costStatus:entryEstimate?'Includes entry-value baseline. This is tracked capital, not a verified original purchase cost.':!lot.time?(lot.receivedAt?'Received by transfer or reward; original purchase cost is unknown.':'Balance present when tracking started; purchase date and cost are unknown.'):cost.cost==null?'Original payment currency cost is not fully known':null,notes:manualCost?'Purchase details entered by you. Quantity is still synced from the account.':'Imported transactions · FIFO capital allocation. Balances remain authoritative. Not a tax report.'});left-=q;if(left<=Math.max(1e-12,b.quantity*1e-10))break;
+  }
+  if(left>Math.max(1e-12,b.quantity*1e-10))result.push({...common,id:'connected:'+c.id+':'+b.id+':residual',quantity:left,availableQuantity:common.availableQuantity*left/b.quantity,costStatus:'Balance differs from imported trades; transfers, rewards or older history may be missing'});
+  offsets[b.asset]=(offsets[b.asset]||0)+b.quantity;
+ }
+ return result;
+});}
+module.exports={linkedHoldings};

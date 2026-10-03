@@ -1,0 +1,112 @@
+[
+  {
+    "from": "Credentials stay encrypted on this Windows account.",
+    "to": "Read-only keys are encrypted in your cloud vault and sent over HTTPS to the HardEarner service for provider requests.",
+    "tr": "Salt okunur anahtarlar bulut kasanda şifreli saklanır; sağlayıcıya istek yapmak için HTTPS ile HardEarner hizmetine gönderilir."
+  },
+  {
+    "from": "I created a dedicated read-only key, disabled trading and withdrawals, and authorise encrypted storage on this computer.",
+    "to": "I created a dedicated read-only key with trading and withdrawals disabled. I authorise encrypted cloud storage and transient use by HardEarner to read my account.",
+    "tr": "Alım satım ve çekim izinleri kapalı, ayrı bir salt okunur anahtar oluşturdum. Şifreli bulut saklamasını ve hesabımı okumak için HardEarner tarafından geçici kullanımını onaylıyorum."
+  },
+  {
+    "from": "This is my own bank account. I authorise balance reads and encrypted storage of this token on this computer.",
+    "to": "This is my own bank account. I authorise balance reads through HardEarner and encrypted storage of this token in my cloud vault.",
+    "tr": "Bu benim banka hesabım. HardEarner üzerinden bakiyemin okunmasını ve belirtecin bulut kasamda şifreli saklanmasını onaylıyorum."
+  },
+  {
+    "from": "Check that the key still exists and has not expired. If IP restrictions are enabled, they must allow this computer’s internet connection.",
+    "to": "Check that the key still exists and has not expired. IP restrictions must permit the cloud service. This preview has no fixed outgoing IP; keep an IP-restricted key in the desktop app until fixed-IP support is available.",
+    "tr": "Anahtarın var olduğunu ve süresinin dolmadığını kontrol et. IP kısıtlaması bulut hizmetini kapsamalıdır. Bu önizlemenin sabit çıkış IP adresi yok; sabit IP desteği gelene kadar kısıtlı anahtarı masaüstü uygulamasında kullan."
+  },
+  {
+    "from": "Local credentials and cached balances will be removed. Manual purchases stay saved.",
+    "to": "This removes the connection from your current cloud vault and synced browsers. Recent encrypted backups can retain it. Manual purchases stay saved.",
+    "tr": "Bağlantı mevcut bulut kasandan ve eşitlenen tarayıcılardan kaldırılır. Son şifreli yedeklerde kalabilir. Manuel alımlar korunur."
+  },
+  {
+    "from": "Saved on this device",
+    "to": "Saved to your encrypted cloud vault",
+    "tr": "Şifreli bulut kasana kaydedilir"
+  },
+  {
+    "from": "Windows notifications",
+    "to": "Browser and in-app notifications",
+    "tr": "Tarayıcı ve uygulama içi bildirimler"
+  },
+  {
+    "from": "Last 200 notices saved on this device. Incomplete wallet syncs do not trigger alerts.",
+    "to": "The latest 200 notices are saved in your encrypted cloud vault. Incomplete wallet syncs do not trigger alerts.",
+    "tr": "Son 200 bildirim şifreli bulut kasanda saklanır. Eksik cüzdan eşitlemeleri uyarı tetiklemez."
+  },
+  {
+    "from": "Connected balances appear in Holdings automatically. Only possible overlaps with manual entries need review. Sync runs every five minutes while this browser is open and unlocked.",
+    "to": "Connected balances join Holdings automatically. Review possible duplicates. Sync runs every five minutes while this browser is visible and unlocked.",
+    "tr": "Bağlı bakiyeler Varlıklara otomatik eklenir. Olası çift kayıtları incele. Bu tarayıcı görünür ve kasa açıkken beş dakikada bir eşitlenir."
+  },
+  {
+    "from": "Spot, Funding and Simple Earn. Margin, Futures, Options and other Earn products are not included.",
+    "to": "Spot, Funding and Simple Earn. Margin, Futures, Options and other Earn products are not included.",
+    "tr": "Spot, Funding ve Simple Earn. Margin, Futures, Options ve diğer Earn ürünleri dahil değildir."
+  },
+  {
+    "from": "Exchange balances, including available and locked TRY and crypto.",
+    "to": "Exchange balances, including available and locked TRY and crypto.",
+    "tr": "Kullanılabilir ve kilitli TL ile kriptolar dahil borsa bakiyeleri."
+  },
+  {
+    "from": "Spot balances, including available and locked crypto and TRY.",
+    "to": "Spot balances, including available and locked crypto and TRY.",
+    "tr": "Kullanılabilir ve kilitli kripto ile TL dahil Spot bakiyeleri."
+  },
+  {
+    "from": "Spot balances and Earn / reward balances returned by BalanceEx. No derivatives wallets.",
+    "to": "Spot balances and Earn / reward balances returned by BalanceEx. No derivatives wallets.",
+    "tr": "BalanceEx ile dönen Spot ve Earn / ödül bakiyeleri. Türev cüzdanları dahil değildir."
+  },
+  {
+    "from": "Advanced Trade accounts accessible to this API key. Other portfolios may need a different key.",
+    "to": "Advanced Trade accounts accessible to this API key. Other portfolios may need a different key.",
+    "tr": "Bu API anahtarının erişebildiği Advanced Trade hesapları. Diğer portföyler farklı anahtar gerektirebilir."
+  },
+  {
+    "from": "Trading and Funding wallets in Spot account mode. Earn, derivatives and margin are not included.",
+    "to": "Trading and Funding wallets in Spot account mode. Earn, derivatives and margin are not included.",
+    "tr": "Spot hesap modunda Trading ve Funding cüzdanları. Earn, türevler ve Margin dahil değildir."
+  },
+  {
+    "from": "Use your own Twelve Data key. It is stored encrypted on this device and sent only to Twelve Data. Available exchanges, fundamentals and delays depend on your subscription; HardEarner does not buy a plan for you.",
+    "to": "Your personal Twelve Data key is encrypted in your cloud vault. Requests pass through our Cloudflare relay to Twelve Data; the relay temporarily processes the key but does not intentionally log it. Your provider plan determines coverage and delays.",
+    "tr": "Kişisel Twelve Data anahtarın bulut kasanda şifrelenir. İstekler Cloudflare aracımız üzerinden Twelve Data’ya gider; aracı anahtarı geçici olarak işler, kaydetmeyi amaçlamaz. Kapsam ve gecikme sağlayıcı paketine bağlıdır."
+  },
+  {
+    "from": "Daily results begin after the next price refresh. Earlier days are not invented. Keep HardEarner running in the tray to collect observations.",
+    "to": "Daily results begin after the next price refresh. Earlier days are not invented. Keep this browser open and the vault unlocked to collect observations.",
+    "tr": "Günlük sonuçlar bir sonraki fiyat yenilemesiyle başlar. Eski günler üretilmez. Gözlem toplamak için bu tarayıcıyı ve kasayı açık tut."
+  },
+  {
+    "from": "Private desktop support: can.yazicioglu.p@gmail.com. Never send API secrets or passwords.",
+    "to": "Private support: can.yazicioglu.p@gmail.com. Never send API secrets or passwords.",
+    "tr": "Özel destek: can.yazicioglu.p@gmail.com. API sırlarını veya şifrelerini asla gönderme."
+  },
+  {
+    "from": "For alerts, send a test notification and check Windows notification settings.",
+    "to": "For alerts, keep this page visible and unlocked, send a test notification and check browser permission.",
+    "tr": "Uyarılar için bu sayfayı görünür ve açık tut, test bildirimi gönder ve tarayıcı iznini kontrol et."
+  },
+  {
+    "from": "Preferences, sources, and your local data.",
+    "to": "Preferences, sources, and your private data.",
+    "tr": "Tercihler, kaynaklar ve özel verilerin."
+  },
+  {
+    "from": "Report saved on this computer. Nothing was sent.",
+    "to": "Report downloaded. Nothing was sent.",
+    "tr": "Rapor indirildi. Hiçbir şey gönderilmedi."
+  },
+  {
+    "from": "Credentials and analysis are encrypted separately and are not included in JSON backups.",
+    "to": "Manual portfolio JSON exports omit credentials and analysis. The full encrypted vault backup above includes them.",
+    "tr": "Manuel portföy JSON dışa aktarımlarında anahtarlar ve analiz yoktur. Yukarıdaki tam şifreli kasa yedeği bunları içerir."
+  }
+]

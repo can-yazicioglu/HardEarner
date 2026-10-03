@@ -1,0 +1,45 @@
+# Dependencies and generated bundles
+**/node_modules/
+desktop/dist/
+web/dist/
+web/build/
+.artifacts/
+**/.wrangler/
+**/coverage/
+**/test-results/
+**/playwright-report/
+*.log
+
+# Machine-specific deployment configuration and credentials
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+web/wrangler*.json*
+!web/wrangler.example.jsonc
+desktop/store/identity.json
+**/worker-configuration.d.ts
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+
+# Never version user profiles, financial exports or release payloads
+**/*.encrypted*
+**/Local State
+**/connections.json
+**/*backup*.zip
+*.msix
+*.appx
+*.msixupload
+*.exe
+*.dmg
+*.zip
+outputs/
+v213-*/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

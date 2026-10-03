@@ -1,0 +1,36 @@
+{
+  "name": "hardearner-desktop",
+  "private": true,
+  "productName": "HardEarner",
+  "version": "2.13.0",
+  "description": "Hard-Earned Money needs attention.",
+  "author": "Can Yazicioglu",
+  "license": "UNLICENSED",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "build": "node build.cjs",
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "package": "node package.cjs",
+    "test:ui": "node tests/hardearner-v213-ui.cjs",
+    "test:investments-ui": "node tests/investments-ui.cjs",
+    "package:store": "node build-msix.cjs"
+  },
+  "dependencies": {
+    "lightweight-charts": "5.0.9",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/parser": "^8.0.5",
+    "@electron/packager": "latest",
+    "electron": "latest",
+    "esbuild": "latest",
+    "playwright": "^1.63.0"
+  },
+  "engines": {
+    "node": ">=24.0.0 <25"
+  }
+}
