@@ -23,6 +23,18 @@ test('Research cache coalesces requests and preserves only dated old values when
  const [a,b]=await Promise.all([research.overview(),research.overview()]);assert.equal(calls,5);assert.equal(a.global.data.cap,123);assert.deepEqual(a,b);now+=1000;await research.overview();assert.equal(calls,5);
  now+=300000;fail=true;const stale=await research.overview();assert(stale.global.stale);assert.equal(stale.global.at,a.global.at);assert.equal(stale.global.data.cap,123);assert(stale.coins.stale);
 });
+test('A failing primary provider falls back with accurate attribution and no invented supply or sparklines',async()=>{
+ const calls=[];let now=1e12,offline=false;
+ const r=createResearch({now:()=>now,requester:async url=>{calls.push(url);if(offline||!url.includes('api.coinpaprika.com'))throw Error('rate limited');
+  if(url.endsWith('/global'))return{market_cap_usd:1000,bitcoin_dominance_percentage:60,market_cap_change_24h:2,last_updated:now/1000};
+  return[{id:'eth-ethereum',symbol:'ETH',name:'Ethereum',rank:2,quotes:{USD:{price:10,market_cap:100,percent_change_24h:-2,percent_change_7d:3}}},{id:'btc-bitcoin',symbol:'BTC',rank:1,quotes:{USD:{price:20,market_cap:600}}}];
+ }});
+ const a=await r.overview();assert.equal(a.global.data.cap,1000);assert.equal(a.global.source,'Powered by CoinPaprika');assert.equal(a.global.stale,false);assert.equal(a.coins.data[0].asset,'BTC');assert.equal(a.coins.data[0].supply,null);assert.deepEqual(a.coins.data[0].spark,[]);assert.equal(a.coins.data[0].change,null);assert.equal(a.trending.data,null);
+ const n=calls.length;await r.overview();assert.equal(calls.length,n);offline=true;now+=300001;const b=await r.overview();assert.equal(b.coins.stale,true);assert.equal(b.coins.at,a.coins.at);assert.equal(b.coins.source,a.coins.source);assert.deepEqual(b.coins.data,a.coins.data);
+});
+test('Fallback provider rejects malformed totals and does not invent dominance',()=>{
+ const {paprikaGlobal,paprikaCoins}=require('../electron/research.cjs');assert.throws(()=>paprikaGlobal({market_cap_usd:null}));assert.throws(()=>paprikaCoins([]));assert.throws(()=>paprikaCoins({error:'limit'}));assert.deepEqual(paprikaGlobal({market_cap_usd:100}).dominance,[]);assert.deepEqual(paprikaGlobal({market_cap_usd:100,bitcoin_dominance_percentage:101}).dominance,[]);
+});
 test('Small balance display groups by account without changing totals or hiding unknown-price assets',()=>{
  const rows=[{id:'1',connectionId:'a',asset:'BABY',type:'crypto',value:.1,connected:true},{id:'2',connectionId:'a',asset:'BABY',type:'crypto',value:.2,connected:true},{id:'3',connectionId:'b',asset:'BABY',type:'crypto',value:10,connected:true},{id:'4',asset:'XAU',type:'metal',value:.1,connected:false},{id:'5',asset:'NEW',type:'crypto',value:null,connected:true}],copy=structuredClone(rows);
  const small=tinyAssetGroups(rows,.75);assert.equal(small.length,1);assert.deepEqual(small[0].rows.map(r=>r.id),['1','2']);assert.deepEqual(rows,copy);assert.equal(tinyAssetGroups(rows,NaN).length,0);

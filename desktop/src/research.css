@@ -21,3 +21,6 @@
 @media(prefers-reduced-motion:reduce){.research-shell *{scroll-behavior:auto!important;transition:none!important}}
 .research-header nav{flex-direction:row}
 .chart-marker-hit{position:absolute;z-index:8;width:20px;height:20px;padding:0;border-radius:5px;border:1px solid currentColor;display:grid;place-items:center;font-size:10px;font-weight:700;background:#102537;color:#62d9af;line-height:1}.chart-marker-hit.sell{color:#ed8397;background:#332132}.chart-marker-hit:hover,.chart-marker-hit:focus-visible{outline:2px solid #b5cafa;outline-offset:2px}.tiny-balances-note{display:flex;gap:20px;align-items:center;justify-content:space-between}.tiny-balances-note button{flex-shrink:0}
+
+/* Public data-provider attribution remains readable, including compact cards. */
+.research-source,.hero-market .research-source{font-size:10px}

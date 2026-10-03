@@ -14,7 +14,7 @@ Self Analysis opens a dedicated Research window on Windows and a separate tab on
 | Gold, silver, platinum, palladium history | [Frankfurter](https://frankfurter.dev/) daily reference observations, divided by 31.1034768 for USD per pure gram. Dates with no observation are not fabricated. |
 | Metal spot sessions | [Gold API](https://gold-api.com/docs/) observations, checked every 30 seconds to match the free endpoint's cache. A new session can initially have only one point. |
 | Intraday metal market charts | TradingView's OANDA XAUUSD, XAGUSD, XPTUSD and XPDUSD listings, quoted per troy ounce. These are venue quotes, not physical dealer buy/sell prices. Market closures and provider availability apply. |
-| Rankings, market totals, dominance, search trends | [CoinGecko](https://docs.coingecko.com/reference/coins-markets), with five-minute caching. Movers are restricted to the fetched top 100, not every coin. |
+| Rankings, market totals, dominance, search trends | [CoinGecko](https://docs.coingecko.com/reference/coins-markets), with five-minute caching. If totals or rankings fail, [CoinPaprika](https://docs.coinpaprika.com/api-reference/tickers/get-tickers-for-all-active-coins) supplies a separately attributed fallback. Missing supply and sparkline values remain blank. If search trends fail, the card explicitly switches to volume leaders, not invented popularity. Movers are restricted to the fetched top 100, not every coin. |
 | DeFi TVL and stablecoins | [DefiLlama](https://api-docs.defillama.com/). The stablecoin number is USD-pegged circulating supply, not an exact traded market cap. CEX/chain categories are excluded from protocol TVL. |
 | Heatmaps, screeners, macro/Volmex charts, calendar and news | [TradingView widgets](https://www.tradingview.com/widget-docs/). Availability, language, refresh and delays are provider-controlled. Some symbols do not provide technical summaries. |
 
@@ -29,6 +29,8 @@ Holdings groups connected asset balances worth less than USD 1 behind a reversib
 Only public symbols and display options are passed to cross-origin TradingView frames. Portfolio data, transaction details and account keys stay outside them. The parent renderer only runs bundled scripts; its CSP limits frame origins. Electron rejects iframe IPC, unexpected navigation, webviews and arbitrary popup destinations. Streams are owned by their opening window, and app lock hides both native windows. Loading an embedded frame cannot stop the native chart stream.
 
 TradingView receives ordinary browser/IP information and may use its own storage. See its [privacy policy](https://www.tradingview.com/privacy-policy/). Public-data requests and chart widgets are external dependencies; a passing fixture suite does not guarantee their future availability.
+
+The CoinPaprika free fallback is for this private, non-commercial beta. Before paid or broad distribution, review the provider licences and request limits.
 
 ## Verification
 

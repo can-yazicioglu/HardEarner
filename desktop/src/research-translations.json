@@ -525,5 +525,14 @@
   },
   "Assets groups connected balances worth less than USD 1 out of the main list. Show small balances reveals them; searching also includes them. They remain in total wealth, exports and favourites. Exchanges may return small trade remainders or rewards that their own interface hides. Sync now checks the current provider balance; historical purchases alone cannot create a current holding.": {
     "tr": "Varlıklar, değeri 1 USD altında olan bağlı bakiyeleri ana listede gizler. Küçük bakiyeleri göster veya arama ile görebilirsin. Toplam birikim, dışa aktarma ve favorilere dahil kalırlar. Borsalar kendi ekranlarında gizledikleri işlem artığı veya ödülleri döndürebilir. Şimdi eşitle güncel bakiyeyi kontrol eder; yalnızca eski alış kaydı yeni bakiye oluşturamaz."
+  },
+  "Volume leaders": {
+    "tr": "Hacim liderleri"
+  },
+  "24h volume · within the top 100": {
+    "tr": "24 saatlik hacim · ilk 100 içinde"
+  },
+  "Search trends unavailable; showing traded volume instead.": {
+    "tr": "Arama eğilimleri alınamıyor; işlem hacmi gösteriliyor."
   }
 }
