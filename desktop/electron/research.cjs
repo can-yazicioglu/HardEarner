@@ -24,6 +24,17 @@ function paprikaGlobal(raw){
  const btc=positive(raw.bitcoin_dominance_percentage);
  return{cap:raw.market_cap_usd,volume:positive(raw.volume_24h_usd),change:finite(raw.market_cap_change_24h),coins:positive(raw.cryptocurrencies_number),markets:null,dominance:btc!=null&&btc<=100?[{asset:'BTC',value:btc}]:[],at:positive(raw.last_updated)?raw.last_updated*1000:null};
 }
+// CoinLore's documented decimal fields are strings; empty/missing data is not zero.
+const decimal=v=>finite(typeof v==='string'&&/^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(v)?Number(v):v);
+function loreCoins(raw){
+ if(!Array.isArray(raw?.data))throw Error('Market ranking is unavailable.');
+ const rows=coins(raw.data.map(r=>({id:text(r.id),symbol:r.symbol,name:r.name,current_price:decimal(r.price_usd),market_cap:decimal(r.market_cap_usd),market_cap_rank:decimal(r.rank),total_volume:decimal(r.volume24),price_change_percentage_24h:decimal(r.percent_change_24h),price_change_percentage_7d_in_currency:decimal(r.percent_change_7d),circulating_supply:decimal(r.csupply),max_supply:decimal(r.msupply)}))).sort((a,b)=>(a.rank??Infinity)-(b.rank??Infinity)).slice(0,100);
+ if(!rows.length)throw Error('Market ranking is unavailable.');return rows;
+}
+function loreGlobal(raw){
+ const r=Array.isArray(raw)?raw[0]:null;
+ return globalData({data:{total_market_cap:{usd:decimal(r?.total_mcap)},total_volume:{usd:decimal(r?.total_volume)},market_cap_change_percentage_24h_usd:decimal(r?.mcap_change),active_cryptocurrencies:decimal(r?.coins_count),markets:decimal(r?.active_markets),market_cap_percentage:{btc:decimal(r?.btc_d),eth:decimal(r?.eth_d)}}});
+}
 function protocols(raw){if(!Array.isArray(raw))throw Error('DeFi data is unavailable.');return raw.filter(r=>r.category!=='CEX'&&r.category!=='Chain'&&positive(r.tvl)>0).sort((a,b)=>b.tvl-a.tvl).slice(0,30).map(r=>({id:text(r.slug),name:text(r.name),asset:text(r.symbol,64),category:text(r.category),tvl:r.tvl,change:finite(r.change_1d),chains:(r.chains||[]).filter(x=>typeof x==='string').slice(0,8)}));}
 function stablecoins(raw){if(!Array.isArray(raw?.peggedAssets))throw Error('Stablecoin data is unavailable.');const rows=raw.peggedAssets.filter(r=>r.pegType==='peggedUSD'&&positive(r.circulating?.peggedUSD)!=null).map(r=>({id:String(r.id),name:text(r.name),asset:text(r.symbol,64),cap:r.circulating.peggedUSD,prior:positive(r.circulatingPrevMonth?.peggedUSD),price:positive(r.price)})).sort((a,b)=>b.cap-a.cap);if(!rows.length)throw Error('Stablecoin data is unavailable.');const cap=rows.reduce((s,r)=>s+r.cap,0),prior=rows.every(r=>r.prior!=null)?rows.reduce((s,r)=>s+r.prior,0):null;return{cap,change:prior>0?(cap/prior-1)*100:null,rows:rows.slice(0,15)};}
 const SOURCES={
@@ -34,15 +45,16 @@ const SOURCES={
  stablecoins:['https://stablecoins.llama.fi/stablecoins?includePrices=true',stablecoins,'DefiLlama · USD-pegged supply']
 };
 const FALLBACKS={
- global:['https://api.coinpaprika.com/v1/global',paprikaGlobal,'Powered by CoinPaprika'],
- coins:['https://api.coinpaprika.com/v1/tickers?quotes=USD',paprikaCoins,'Powered by CoinPaprika']
+ global:[['https://api.coinlore.net/api/global/',loreGlobal,'CoinLore'],['https://api.coinpaprika.com/v1/global',paprikaGlobal,'Powered by CoinPaprika']],
+ coins:[['https://api.coinlore.net/api/tickers/',loreCoins,'CoinLore'],['https://api.coinpaprika.com/v1/tickers?quotes=USD',paprikaCoins,'Powered by CoinPaprika']]
 };
+const PUBLIC_HEADERS={'User-Agent':'HardEarner/2.14 (+https://desktop.hardearner.com/privacy)',Accept:'application/json'};
 function createResearch({requester=request,now=Date.now}={}){
  const saved=new Map(),inflight=new Map();
  async function section(key){const [url,parse,source]=SOURCES[key],old=saved.get(key);if(old&&now()-old.checkedAt<300000)return structuredClone(old);if(inflight.has(key))return inflight.get(key);
   const job=(async()=>{let next;
    // Independent public provider fallback; never substitute fabricated totals or trends.
-   for(const [feedURL,parser,provider] of [[url,parse,source],...(FALLBACKS[key]?[FALLBACKS[key]]:[])]){try{next={data:parser(await requester(feedURL)),source:provider,at:now(),checkedAt:now(),stale:false,error:null};break}catch{}}
+   for(const [feedURL,parser,provider] of [[url,parse,source],...(FALLBACKS[key]||[])]){try{next={data:parser(await requester(feedURL,{headers:PUBLIC_HEADERS})),source:provider,at:now(),checkedAt:now(),stale:false,error:null};break}catch{}}
    if(!next)next={...(old||{data:null,source,at:null}),checkedAt:now(),stale:true,error:'This feed is temporarily unavailable. Retry later.'};
    saved.set(key,next);return structuredClone(next);
   })();inflight.set(key,job);try{return await job}finally{inflight.delete(key)}
@@ -50,4 +62,4 @@ function createResearch({requester=request,now=Date.now}={}){
  return{overview:async()=>Object.fromEntries(await Promise.all(Object.keys(SOURCES).map(async k=>[k,await section(k)])))};
 }
 const live=createResearch();
-module.exports={coins,globalData,trending,paprikaCoins,paprikaGlobal,protocols,stablecoins,createResearch,overview:live.overview};
+module.exports={coins,globalData,trending,paprikaCoins,paprikaGlobal,loreCoins,loreGlobal,protocols,stablecoins,createResearch,overview:live.overview};

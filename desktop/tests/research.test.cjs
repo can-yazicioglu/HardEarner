@@ -25,7 +25,7 @@ test('Research cache coalesces requests and preserves only dated old values when
 });
 test('A failing primary provider falls back with accurate attribution and no invented supply or sparklines',async()=>{
  const calls=[];let now=1e12,offline=false;
- const r=createResearch({now:()=>now,requester:async url=>{calls.push(url);if(offline||!url.includes('api.coinpaprika.com'))throw Error('rate limited');
+ const r=createResearch({now:()=>now,requester:async (url,options)=>{assert.match(options.headers['User-Agent'],/^HardEarner\/2\.14/);calls.push(url);if(offline||!url.includes('api.coinpaprika.com'))throw Error('rate limited');
   if(url.endsWith('/global'))return{market_cap_usd:1000,bitcoin_dominance_percentage:60,market_cap_change_24h:2,last_updated:now/1000};
   return[{id:'eth-ethereum',symbol:'ETH',name:'Ethereum',rank:2,quotes:{USD:{price:10,market_cap:100,percent_change_24h:-2,percent_change_7d:3}}},{id:'btc-bitcoin',symbol:'BTC',rank:1,quotes:{USD:{price:20,market_cap:600}}}];
  }});
@@ -34,6 +34,13 @@ test('A failing primary provider falls back with accurate attribution and no inv
 });
 test('Fallback provider rejects malformed totals and does not invent dominance',()=>{
  const {paprikaGlobal,paprikaCoins}=require('../electron/research.cjs');assert.throws(()=>paprikaGlobal({market_cap_usd:null}));assert.throws(()=>paprikaCoins([]));assert.throws(()=>paprikaCoins({error:'limit'}));assert.deepEqual(paprikaGlobal({market_cap_usd:100}).dominance,[]);assert.deepEqual(paprikaGlobal({market_cap_usd:100,bitcoin_dominance_percentage:101}).dominance,[]);
+});
+test('CoinLore fallback parses documented decimal strings but never treats empty metrics as zero',()=>{
+ const {loreCoins,loreGlobal}=require('../electron/research.cjs');
+ const rows=loreCoins({data:[{id:'90',symbol:'BTC',rank:1,price_usd:'84000.00',market_cap_usd:'1690000000000.90',percent_change_24h:'0.60',percent_change_7d:'-0.9',csupply:'19970852.00',msupply:''}]});
+ assert.equal(rows[0].price,84000);assert.equal(rows[0].change,.6);assert.equal(rows[0].week,-.9);assert.equal(rows[0].supply,19970852);assert.equal(rows[0].maxSupply,null);assert.deepEqual(rows[0].spark,[]);
+ assert.throws(()=>loreCoins({data:[]}));assert.throws(()=>loreCoins({data:[{id:'x',symbol:'X',price_usd:''}]}));assert.throws(()=>loreGlobal([{total_mcap:''}]));
+ const g=loreGlobal([{total_mcap:100,btc_d:'60.5',eth_d:'10',mcap_change:'-2',total_volume:20,coins_count:1000}]);assert.equal(g.cap,100);assert.equal(g.change,-2);assert.deepEqual(g.dominance,[{asset:'BTC',value:60.5},{asset:'ETH',value:10}]);
 });
 test('Small balance display groups by account without changing totals or hiding unknown-price assets',()=>{
  const rows=[{id:'1',connectionId:'a',asset:'BABY',type:'crypto',value:.1,connected:true},{id:'2',connectionId:'a',asset:'BABY',type:'crypto',value:.2,connected:true},{id:'3',connectionId:'b',asset:'BABY',type:'crypto',value:10,connected:true},{id:'4',asset:'XAU',type:'metal',value:.1,connected:false},{id:'5',asset:'NEW',type:'crypto',value:null,connected:true}],copy=structuredClone(rows);

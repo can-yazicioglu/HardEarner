@@ -133,7 +133,7 @@ node desktop/node_modules/playwright/cli.js install chromium webkit
 npm run test:web-ui
 ```
 
-- **211 unit/integration tests** across the shared desktop core and web services.
+- **212 unit/integration tests** across the shared desktop core and web services.
 - **Eight web UI runs** across Chromium and WebKit, including vault sync, conflicting saves, recovery, investments, drawings and streamed chart updates.
 - Responsive checks cover **11 portfolio routes and six Research sections at four widths**, from phone to desktop.
 - Optional Windows Electron tests cover isolated profiles, restart persistence and the desktop interface: `npm run test:desktop-ui`.
