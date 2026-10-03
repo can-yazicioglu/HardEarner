@@ -36,7 +36,7 @@ function createChartStreams({emit,Socket=globalThis.WebSocket,now=Date.now,timer
   const send=v=>{if(!s.closed)emit(id,v)};
   if(c.venue==='goldapi'){
    let busy=false;const poll=async()=>{if(busy||s.closed)return;busy=true;try{const d=await metalSample(c.asset);send({status:d.stale?'delayed':'live',bar:d.bars.at(-1),mode:'polled',receivedAt:d.fetchedAt,quotedAt:d.quotedAt})}catch{send({status:'delayed'})}finally{busy=false}};
-   send({status:'connecting'});poll();s.watch=timers.setInterval(poll,5000);s.watch?.unref?.();return true;
+   send({status:'connecting'});poll();s.watch=timers.setInterval(poll,30000);s.watch?.unref?.();return true;
   }
   function connect(){
    if(s.closed)return;send({status:'connecting'});s.opened=now();s.last=0;

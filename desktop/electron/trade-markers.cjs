@@ -3,11 +3,11 @@ function executions(connections,holdings=[]){
  const rows=connections.filter(c=>!c.sandbox).flatMap(c=>(c.history?.events||[]).flatMap(e=>{
   if(!Number.isFinite(e.time)||e.quantity<=0||e.paid<0)return[];
   const common={time:e.time,source:c.label,reference:e.id,isin:e.instrument?.isin||'',conversion:isConversion(e),fees:e.fees||[{asset:e.feeAsset,amount:e.reportedFee??e.fee??0}]};
-  const result=[{...common,id:c.id+':'+e.id+':base',asset:e.base,type:e.assetType||'crypto',side:e.side,quantity:e.quantity,price:e.executionPrice??e.paid/e.quantity,currency:e.executionCurrency||e.quote}];
+  const result=[{...common,id:c.id+':'+e.id+':base',asset:e.base,type:e.assetType||'crypto',side:e.side,quantity:e.quantity,price:e.executionPrice??e.paid/e.quantity,currency:e.executionCurrency||e.quote,total:e.executionPrice!=null?e.executionPrice*e.quantity:e.paid,payment:e.paid,paymentCurrency:e.quote}];
   if(isConversion(e)&&!['USD','TRY','GBP','EUR'].includes(e.quote)&&e.paid>0)result.push({...common,id:c.id+':'+e.id+':quote',asset:e.quote,type:'crypto',side:e.side==='BUY'?'SELL':'BUY',quantity:e.paid,price:e.quantity/e.paid,currency:e.base});
   return result;
  }));
- for(const h of holdings.filter(h=>!h.connected&&!h.excluded&&h.purchaseDate))rows.push({id:'manual:'+h.id,asset:h.asset,type:h.type,side:'BUY',quantity:h.quantity,price:h.cost==null?null:h.cost/h.quantity,currency:h.costCurrency,time:Date.parse(h.purchaseDate+'T12:00:00Z'),dateOnly:true,source:h.location||'Physical / manual',reference:h.id,fees:[{asset:h.costCurrency,amount:h.purchaseFee||0}]});
+ for(const h of holdings.filter(h=>!h.connected&&!h.excluded&&h.purchaseDate))rows.push({id:'manual:'+h.id,asset:h.asset,type:h.type,side:'BUY',quantity:h.quantity,price:h.cost==null?null:h.cost/h.quantity,total:h.cost,currency:h.costCurrency,time:Date.parse(h.purchaseDate+'T12:00:00Z'),dateOnly:true,source:h.location||'Physical / manual',reference:h.id,fees:[{asset:h.costCurrency,amount:h.purchaseFee||0}]});
  return [...new Map(rows.map(r=>[r.id,r])).values()].sort((a,b)=>a.time-b.time);
 }
 function markers(rows,asset,type,bars){

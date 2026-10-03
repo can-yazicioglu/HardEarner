@@ -1,0 +1,529 @@
+{
+  "Research": {
+    "tr": "Araştırma",
+    "de": "Recherche",
+    "fr": "Recherche",
+    "es": "Investigación",
+    "ru": "Исследования"
+  },
+  "Overview": {
+    "tr": "Genel bakış",
+    "de": "Übersicht",
+    "fr": "Vue d’ensemble",
+    "es": "Resumen",
+    "ru": "Обзор"
+  },
+  "Charts": {
+    "tr": "Grafikler",
+    "de": "Charts",
+    "fr": "Graphiques",
+    "es": "Gráficos",
+    "ru": "Графики"
+  },
+  "Screener": {
+    "tr": "Tarayıcı",
+    "de": "Screener",
+    "fr": "Sélecteur",
+    "es": "Buscador",
+    "ru": "Скринер"
+  },
+  "News": {
+    "tr": "Haberler",
+    "de": "Nachrichten",
+    "fr": "Actualités",
+    "es": "Noticias",
+    "ru": "Новости"
+  },
+  "Ideas & notes": {
+    "tr": "Fikirler ve notlar",
+    "de": "Ideen und Notizen",
+    "fr": "Idées et notes",
+    "es": "Ideas y notas",
+    "ru": "Идеи и заметки"
+  },
+  "CLARITY BEFORE EVERY MOVE": {
+    "tr": "HER ADIMDAN ÖNCE NETLİK"
+  },
+  "A WIDER PERSPECTIVE": {
+    "tr": "DAHA GENİŞ BİR BAKIŞ"
+  },
+  "See the market.": {
+    "tr": "Piyasayı gör."
+  },
+  "Find your next question.": {
+    "tr": "Bir sonraki sorunu bul."
+  },
+  "One calm workspace for prices, context and your own analysis.": {
+    "tr": "Fiyatlar, piyasa bilgileri ve kendi analizlerin için sade bir çalışma alanı."
+  },
+  "Open your charts": {
+    "tr": "Grafiklerini aç"
+  },
+  "GLOBAL CRYPTO MARKET CAP": {
+    "tr": "TOPLAM KRİPTO PİYASA DEĞERİ"
+  },
+  "Sparkline: Bitcoin · 7 days": {
+    "tr": "Mini grafik: Bitcoin · 7 gün"
+  },
+  "24h volume": {
+    "tr": "24 saatlik hacim"
+  },
+  "Bitcoin dominance": {
+    "tr": "Bitcoin hakimiyeti"
+  },
+  "USD stablecoin supply": {
+    "tr": "USD sabit kripto arzı"
+  },
+  "Active cryptocurrencies": {
+    "tr": "Aktif kripto paralar"
+  },
+  "Your market pulse": {
+    "tr": "Piyasanın nabzı"
+  },
+  "Choose a market": {
+    "tr": "Piyasa seç"
+  },
+  "Indicative spot / pure gram": {
+    "tr": "Gösterge spot / saf gram"
+  },
+  "Gainers": {
+    "tr": "Yükselenler"
+  },
+  "Losers": {
+    "tr": "Düşenler"
+  },
+  "24h · within the top 100": {
+    "tr": "24 saat · ilk 100 içinde"
+  },
+  "Community trends": {
+    "tr": "İlgi görenler"
+  },
+  "Popular searches on CoinGecko": {
+    "tr": "CoinGecko’da popüler aramalar"
+  },
+  "Market cap ranking": {
+    "tr": "Piyasa değerine göre sıralama"
+  },
+  "Top 100 by market cap · aggregated USD prices": {
+    "tr": "Piyasa değerinde ilk 100 · birleştirilmiş USD fiyatları"
+  },
+  "All coins": {
+    "tr": "Tüm coinler"
+  },
+  "Favourites": {
+    "tr": "Favoriler"
+  },
+  "Favourite": {
+    "tr": "Favori"
+  },
+  "Search ranked coins": {
+    "tr": "Sıralamadaki coinleri ara"
+  },
+  "Search coins…": {
+    "tr": "Coin ara…"
+  },
+  "Market cap": {
+    "tr": "Piyasa değeri"
+  },
+  "Circulating supply": {
+    "tr": "Dolaşımdaki arz"
+  },
+  "7-day trend": {
+    "tr": "7 günlük eğilim"
+  },
+  "Seven-day price trend": {
+    "tr": "Yedi günlük fiyat eğilimi"
+  },
+  "No matching coins.": {
+    "tr": "Eşleşen coin yok."
+  },
+  "Ranking is temporarily unavailable. Other research tools remain available.": {
+    "tr": "Sıralama şu an alınamıyor. Diğer araştırma araçlarını kullanabilirsin."
+  },
+  "Cached data · refresh unavailable": {
+    "tr": "Önbellekteki veri · yenilenemedi"
+  },
+  "Feed unavailable": {
+    "tr": "Veri alınamıyor"
+  },
+  "Dominance by market cap": {
+    "tr": "Piyasa değerine göre hakimiyet"
+  },
+  "Share of the total crypto market": {
+    "tr": "Toplam kripto piyasasındaki pay"
+  },
+  "Others": {
+    "tr": "Diğerleri"
+  },
+  "TVL ranking": {
+    "tr": "Kilitli değer sıralaması"
+  },
+  "DeFi protocols · excludes centralised exchanges": {
+    "tr": "DeFi protokolleri · merkezi borsalar hariç"
+  },
+  "Market cap breakdown": {
+    "tr": "Piyasa değerinin dağılımı"
+  },
+  "Volmex implied volatility": {
+    "tr": "Volmex beklenen oynaklık"
+  },
+  "Crypto market heatmap": {
+    "tr": "Kripto piyasası ısı haritası"
+  },
+  "Crypto collections": {
+    "tr": "Kripto koleksiyonları"
+  },
+  "Specialist collections open at TradingView with their full dataset.": {
+    "tr": "Özel koleksiyonlar, tam veri kümesiyle TradingView’da açılır."
+  },
+  "Top stories": {
+    "tr": "Öne çıkan haberler"
+  },
+  "A thesis, not a hunch.": {
+    "tr": "Fikrini kanıtlarla destekle."
+  },
+  "Keep the evidence, your entry idea and what would change your mind next to the chart.": {
+    "tr": "Gerekçelerini, giriş fikrini ve fikrini neyin değiştireceğini grafiğin yanında sakla."
+  },
+  "My research notes": {
+    "tr": "Araştırma notlarım"
+  },
+  "Community ideas": {
+    "tr": "Topluluk fikirleri"
+  },
+  "Explore the latest public analyses with their original authors on TradingView. Community opinions are not verified recommendations.": {
+    "tr": "TradingView’daki güncel analizleri yazarlarının sayfasında incele. Topluluk görüşleri doğrulanmış öneriler değildir."
+  },
+  "Explore TradingView ideas": {
+    "tr": "TradingView fikirlerini incele"
+  },
+  "Understand the numbers": {
+    "tr": "Rakamları anla"
+  },
+  "What is market cap?": {
+    "tr": "Piyasa değeri nedir?"
+  },
+  "Current price multiplied by circulating supply. It is not the amount of cash invested, and providers can use different supply definitions.": {
+    "tr": "Güncel fiyat ile dolaşımdaki arzın çarpımıdır. Yatırılan nakit miktarı değildir; sağlayıcıların arz tanımları farklı olabilir."
+  },
+  "What is TVL?": {
+    "tr": "TVL nedir?"
+  },
+  "Total value locked is the value tracked in a DeFi protocol. It differs from a token market cap and can include assets reused across protocols.": {
+    "tr": "Bir DeFi protokolünde izlenen kilitli varlıkların değeridir. Coinin piyasa değeriyle aynı değildir; protokoller arasında tekrar kullanılan varlıklar içerebilir."
+  },
+  "Why do prices differ?": {
+    "tr": "Fiyatlar neden farklı?"
+  },
+  "Rankings use aggregated USD prices. My chart uses the named exchange and quote currency. USDT and USD are different assets; dealer metal prices include spreads and purity.": {
+    "tr": "Sıralama, birleştirilmiş USD fiyatlarını kullanır. Grafiğim seçili borsayı ve fiyat para birimini kullanır. USDT ile USD farklı varlıklardır; kuyumcu fiyatlarında makas ve saflık da etkilidir."
+  },
+  "What does implied volatility mean?": {
+    "tr": "Beklenen oynaklık ne demek?"
+  },
+  "An options-based estimate of the size of future price moves, not their direction. Volmex index availability is controlled by the data provider.": {
+    "tr": "Opsiyon fiyatlarından hesaplanan, gelecekteki fiyat hareketlerinin büyüklüğüne ilişkin tahmindir; yönünü söylemez. Volmex endekslerinin erişimi veri sağlayıcısına bağlıdır."
+  },
+  "Some research feeds are unavailable. Charts and saved work remain available.": {
+    "tr": "Bazı araştırma verileri alınamıyor. Grafikler ve kayıtlı çalışmaların kullanılabilir."
+  },
+  "Search markets": {
+    "tr": "Piyasa ara"
+  },
+  "Back to portfolio": {
+    "tr": "Birikimlere dön"
+  },
+  "Public market data": {
+    "tr": "Genel piyasa verileri"
+  },
+  "Give your ideas room.": {
+    "tr": "Fikirlerine alan aç."
+  },
+  "My chart": {
+    "tr": "Grafiğim",
+    "de": "Mein Chart",
+    "fr": "Mon graphique",
+    "es": "Mi gráfico",
+    "ru": "Мой график"
+  },
+  "Market chart": {
+    "tr": "Piyasa grafiği",
+    "de": "Marktchart",
+    "fr": "Graphique de marché",
+    "es": "Gráfico de mercado",
+    "ru": "Рыночный график"
+  },
+  "Market chart has TradingView tools and data. Metal prices are per troy ounce on the selected venue. Use My chart for gram prices, your saved drawings, trade markers and HardEarner alerts. Embedded chart drawings are not synced to your HardEarner vault.": {
+    "tr": "Piyasa grafiği TradingView araçlarını ve verilerini kullanır. Maden fiyatları seçili piyasada troy ons başınadır. Gram fiyatları, kayıtlı çizimler, işlem işaretleri ve HardEarner alarmları için Grafiğim’i kullan. Gömülü grafikteki çizimler HardEarner kasana kaydedilmez."
+  },
+  "Technical summary": {
+    "tr": "Teknik özet"
+  },
+  "Your conditions. One clear reminder.": {
+    "tr": "Koşulunu belirle. Fiyat gelince hatırlat."
+  },
+  "Look beyond the obvious.": {
+    "tr": "İlk bakışın ötesine geç."
+  },
+  "Compare markets, then open a chart to investigate.": {
+    "tr": "Piyasaları karşılaştır, ardından incelemek için bir grafik aç."
+  },
+  "Crypto heatmap": {
+    "tr": "Kripto ısı haritası"
+  },
+  "Economic calendar": {
+    "tr": "Ekonomik takvim"
+  },
+  "Currency cross rates": {
+    "tr": "Çapraz kurlar"
+  },
+  "Market screener": {
+    "tr": "Piyasa tarayıcısı"
+  },
+  "The story behind the move.": {
+    "tr": "Hareketin arkasındaki haber."
+  },
+  "Original headlines and reporting from TradingView’s news providers.": {
+    "tr": "TradingView haber sağlayıcılarının özgün başlıkları ve haberleri."
+  },
+  "Currencies & metals": {
+    "tr": "Döviz ve madenler"
+  },
+  "Top stories & news": {
+    "tr": "Öne çıkanlar ve haberler"
+  },
+  "Separate evidence from expectations.": {
+    "tr": "Kanıtlarını beklentilerinden ayır."
+  },
+  "Your private research journal": {
+    "tr": "Kişisel araştırma günlüğün"
+  },
+  "Notes belong to a market and timeframe. Open My chart, expand My analysis notes, write your thesis and save. Draw your levels and add an alert to revisit your plan.": {
+    "tr": "Notlar piyasa ve zaman aralığına aittir. Grafiğim → Analiz notlarım bölümünü aç, fikrini yaz ve kaydet. Seviyelerini çiz ve planını tekrar değerlendirmek için alarm ekle."
+  },
+  "Write alongside a chart": {
+    "tr": "Grafiğin yanında not al"
+  },
+  "What is the evidence?": {
+    "tr": "Kanıtlar neler?"
+  },
+  "What price or event invalidates the idea?": {
+    "tr": "Hangi fiyat veya olay fikrini geçersiz kılar?"
+  },
+  "What is the planned risk, including fees?": {
+    "tr": "Ücretler dahil planladığın risk ne?"
+  },
+  "What happened, and what did you learn?": {
+    "tr": "Ne oldu, ne öğrendin?"
+  },
+  "Read public analyses on TradingView, with their dates, authors and discussion. Their community feed is linked at its source; it is not copied or presented as HardEarner advice.": {
+    "tr": "TradingView analizlerini tarihleri, yazarları ve yorumlarıyla oku. Topluluk akışı kaynağında açılır; kopyalanmaz veya HardEarner önerisi olarak sunulmaz."
+  },
+  "A convincing chart is not proof. Compare venues, check timestamps and test what would make the idea wrong.": {
+    "tr": "İkna edici bir grafik tek başına kanıt değildir. Piyasaları karşılaştır, tarihleri kontrol et ve fikrin hangi koşullarda yanlış olacağını sorgula."
+  },
+  "Your holdings and API keys are never sent to research widgets.": {
+    "tr": "Birikimlerin ve API anahtarların araştırma araçlarına gönderilmez."
+  },
+  "Refreshing research…": {
+    "tr": "Araştırma verileri yenileniyor…"
+  },
+  "Public overview refreshes every 5 minutes. Chart sources have their own cadence.": {
+    "tr": "Genel bakış 5 dakikada bir yenilenir. Grafikler kendi kaynaklarının hızında güncellenir."
+  },
+  "Reload widget": {
+    "tr": "Aracı yeniden yükle"
+  },
+  "Loading public market widget…": {
+    "tr": "Piyasa aracı yükleniyor…"
+  },
+  "TradingView data · availability and delays depend on the market.": {
+    "tr": "TradingView verileri · erişim ve gecikme piyasaya bağlıdır."
+  },
+  "Market data by TradingView": {
+    "tr": "Piyasa verileri: TradingView"
+  },
+  "Search once. Open a chart.": {
+    "tr": "Ara, seç ve grafiği aç."
+  },
+  "Search chart markets": {
+    "tr": "Grafik piyasalarını ara"
+  },
+  "Search symbol or name…": {
+    "tr": "Sembol veya isim ara…"
+  },
+  "Add a listing in Stocks & funds first. The Market chart also lets you search TradingView listings.": {
+    "tr": "Önce Hisseler ve fonlar bölümüne bir kayıt ekle. Piyasa grafiğinde TradingView varlıklarını da arayabilirsin."
+  },
+  "No matching market. Try another symbol.": {
+    "tr": "Eşleşen piyasa yok. Başka bir sembol dene."
+  },
+  "Choose a market above, then use the chart search to find the exact exchange listing. Saved investments remain in My chart.": {
+    "tr": "Yukarıdan bir piyasa seç, ardından grafikte arama yaparak tam borsa kaydını bul. Kaydettiğin yatırımlar Grafiğim’de durur."
+  },
+  "Plan your risk": {
+    "tr": "Riskini planla"
+  },
+  "Position size from your maximum planned loss.": {
+    "tr": "Planladığın en yüksek kayba göre pozisyon büyüklüğü."
+  },
+  "Entry price": {
+    "tr": "Giriş fiyatı"
+  },
+  "Stop price": {
+    "tr": "Zarar durdur fiyatı"
+  },
+  "Amount at risk": {
+    "tr": "Riske edilen tutar"
+  },
+  "Fee per side %": {
+    "tr": "Her yön için ücret %"
+  },
+  "Position size": {
+    "tr": "Pozisyon büyüklüğü"
+  },
+  "Use one quote currency for all inputs. Includes both fee sides; excludes slippage, borrowing and gaps. A stop is not a guarantee.": {
+    "tr": "Tüm alanları aynı para birimiyle gir. Alış ve satış ücretleri dahildir; fiyat kayması, borçlanma ve fiyat boşlukları hariçtir. Zarar durdur emri garanti değildir."
+  },
+  "Choose chart market": {
+    "tr": "Grafik piyasasını seç"
+  },
+  "Candlesticks": {
+    "tr": "Mumlar"
+  },
+  "Candle interval": {
+    "tr": "Mum aralığı"
+  },
+  "Data source": {
+    "tr": "Veri kaynağı"
+  },
+  "Spot session": {
+    "tr": "Spot oturumu"
+  },
+  "Waiting for the next observed price": {
+    "tr": "Bir sonraki fiyat bekleniyor"
+  },
+  "Spot sessions start now. Use Daily history for a complete chart, or the Market chart for intraday metal candles.": {
+    "tr": "Spot oturumu şimdi başlar. Tam geçmiş için Günlük geçmiş’i, gün içi maden mumları için Piyasa grafiği’ni kullan."
+  },
+  "Show historical chart": {
+    "tr": "Geçmiş grafiğini göster"
+  },
+  "Spot quotes checked every 30 seconds. No invented candles or volume.": {
+    "tr": "Spot fiyatlar 30 saniyede bir kontrol edilir. Yapay mum veya hacim oluşturulmaz."
+  },
+  "Bought": {
+    "tr": "Alındı"
+  },
+  "Sold": {
+    "tr": "Satıldı"
+  },
+  "Trade value": {
+    "tr": "İşlem tutarı"
+  },
+  "Paid / received": {
+    "tr": "Ödenen / alınan"
+  },
+  "Execution currency may differ from the chart. Trade value excludes separately recorded fees.": {
+    "tr": "İşlem para birimi grafikten farklı olabilir. İşlem tutarına ayrıca kaydedilen ücretler dahil değildir."
+  },
+  "Purchase details": {
+    "tr": "Alış ayrıntıları"
+  },
+  "Sale details": {
+    "tr": "Satış ayrıntıları"
+  },
+  "small connected balances under USD 1. Included in your total wealth. They may be exchange dust or rewards. Search to find any balance.": {
+    "tr": "adet 1 USD altı bağlı bakiye var. Toplam birikimine dahildir. İşlem artığı veya ödül olabilir. İstediğin bakiyeyi arayabilirsin."
+  },
+  "Hide small balances": {
+    "tr": "Küçük bakiyeleri gizle"
+  },
+  "Show small balances": {
+    "tr": "Küçük bakiyeleri göster"
+  },
+  "Total value locked rank": {
+    "tr": "Kilitli değere göre sıralama"
+  },
+  "DeFi coins": {
+    "tr": "DeFi coinleri"
+  },
+  "Large-cap": {
+    "tr": "Büyük piyasa değeri"
+  },
+  "Small-cap": {
+    "tr": "Küçük piyasa değeri"
+  },
+  "Most addresses with balance": {
+    "tr": "En çok bakiyeli adres"
+  },
+  "Most daily active addresses": {
+    "tr": "En çok günlük aktif adres"
+  },
+  "Most transactions": {
+    "tr": "En çok işlem"
+  },
+  "Highest transaction volume": {
+    "tr": "En yüksek işlem hacmi"
+  },
+  "Lowest supply": {
+    "tr": "En düşük arz"
+  },
+  "Highest supply": {
+    "tr": "En yüksek arz"
+  },
+  "Most expensive": {
+    "tr": "En yüksek birim fiyat"
+  },
+  "Most volatile": {
+    "tr": "En oynak"
+  },
+  "Highest open interest": {
+    "tr": "En yüksek açık pozisyon"
+  },
+  "Rising open interest": {
+    "tr": "Artan açık pozisyon"
+  },
+  "Funding extremes": {
+    "tr": "Uç fonlama oranları"
+  },
+  "Top liquidations": {
+    "tr": "En yüksek tasfiyeler"
+  },
+  "All-time high": {
+    "tr": "Tüm zamanların zirvesi"
+  },
+  "All-time low": {
+    "tr": "Tüm zamanların dibi"
+  },
+  "52-week high": {
+    "tr": "52 haftanın zirvesi"
+  },
+  "52-week low": {
+    "tr": "52 haftanın dibi"
+  },
+  "Open your research desk": {
+    "tr": "Araştırma alanını aç"
+  },
+  "Self Analysis opens HardEarner Research in its own desktop window or browser tab. Overview shows public market data; Charts holds your analysis; Screener compares markets; News shows original TradingView headlines; Ideas & notes explains your journal; Price alerts contains your saved reminders. Back to portfolio returns to your money. A new private-web tab asks you to unlock the same vault.": {
+    "tr": "Kendi Analizim, HardEarner Araştırma’yı ayrı masaüstü penceresinde veya tarayıcı sekmesinde açar. Genel bakış piyasa verilerini, Grafikler analizini, Tarayıcı karşılaştırmaları, Haberler TradingView başlıklarını, Fikirler ve notlar günlüğünü, Fiyat uyarıları kayıtlı alarmlarını gösterir. Birikimlere dön ile paranı görürsün. Yeni özel web sekmesinde aynı kasayı yeniden açman gerekir."
+  },
+  "Choose the right metal chart": {
+    "tr": "Doğru maden grafiğini seç"
+  },
+  "In Research → Charts → My chart, press the market name and choose Precious Metals. Gold, silver, platinum and palladium open real daily history in USD per pure gram. Data source → Spot session records observed quotes every 30 seconds and starts with one point. For intraday candles, switch to Market chart and choose a metal: these quotes are per troy ounce. Markets pause on weekends; neither chart is a dealer offer.": {
+    "tr": "Araştırma → Grafikler → Grafiğim bölümünde piyasa adına basıp Değerli Madenler’i seç. Altın, gümüş, platin ve paladyum, saf gram başına USD olarak gerçek günlük geçmişle açılır. Veri kaynağı → Spot oturumu, 30 saniyede bir gözlenen fiyatları kaydeder ve tek noktadan başlar. Gün içi mumlar için Piyasa grafiği’ne geçip madeni seç: burada fiyat troy ons başınadır. Piyasa hafta sonu durabilir; grafikler kuyumcu teklifi değildir."
+  },
+  "Read the exact trade behind a marker": {
+    "tr": "Grafik işaretinden gerçek işlemi oku"
+  },
+  "In My chart, hover, tap or focus a B or S marker for its quantity, original execution price, trade value, reported fees, date and source. Several trades in one candle share a popup. Chart currency may differ from execution currency. Hide balances also hides these popups. Missing original prices remain unknown; an indicative chart price is never substituted.": {
+    "tr": "Grafiğim’de B veya S işaretinin üzerine gel, dokun veya klavyeyle odaklan. Miktar, gerçek işlem fiyatı, tutar, bildirilen ücretler, tarih ve kaynak açılır. Aynı mumdaki işlemler birlikte gösterilir. Grafik ve işlem para birimi farklı olabilir. Bakiyeleri gizlemek bu kutuları da gizler. Eksik işlem fiyatı bilinmiyor olarak kalır; yerine grafik fiyatı yazılmaz."
+  },
+  "Understand very small balances": {
+    "tr": "Çok küçük bakiyeleri anla"
+  },
+  "Assets groups connected balances worth less than USD 1 out of the main list. Show small balances reveals them; searching also includes them. They remain in total wealth, exports and favourites. Exchanges may return small trade remainders or rewards that their own interface hides. Sync now checks the current provider balance; historical purchases alone cannot create a current holding.": {
+    "tr": "Varlıklar, değeri 1 USD altında olan bağlı bakiyeleri ana listede gizler. Küçük bakiyeleri göster veya arama ile görebilirsin. Toplam birikim, dışa aktarma ve favorilere dahil kalırlar. Borsalar kendi ekranlarında gizledikleri işlem artığı veya ödülleri döndürebilir. Şimdi eşitle güncel bakiyeyi kontrol eder; yalnızca eski alış kaydı yeni bakiye oluşturamaz."
+  }
+}

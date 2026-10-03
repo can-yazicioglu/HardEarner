@@ -39,6 +39,7 @@ async function launch(){
 
    if(u.hostname==='api.gold-api.com')return reply({symbol:u.pathname.split('/').at(-1),price:3100,updatedAt:new Date().toISOString()});
 
+   if(u.hostname==='api.frankfurter.dev'&&u.searchParams.get('from'))return reply(Array.from({length:260},(_,i)=>({date:new Date(Date.now()-(260-i)*86400000).toISOString().slice(0,10),base:u.searchParams.get('base'),quote:'USD',rate:3000+i})));
    if(u.hostname==='api.frankfurter.dev')return reply(['TRY','GBP','EUR'].map(quote=>({date:u.searchParams.get('date')||'2026-09-25',base:'USD',quote,rate:{TRY:40,GBP:.8,EUR:.9}[quote]})));
 
    if(u.pathname.endsWith('/ticker/24hr'))return reply([{symbol:'BTCUSDT',lastPrice:'100',bidPrice:'99',askPrice:'101',count:1,closeTime:Date.now()}]);
@@ -75,11 +76,11 @@ async function stop(){await app.close()}
 
   await card.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'HardEarner-2.13-connections.png')});await card.getByRole('button',{name:'Manage',exact:true}).click();await page.getByRole('heading',{name:'Manage connection · Kraken',exact:true}).waitFor();await page.getByRole('button',{name:'Close dialog',exact:true}).click();
 
-  await page.getByRole('button',{name:'Learn FAST',exact:true}).click();await page.locator('.fast-step').last().waitFor();assert.equal(await page.locator('.fast-step').count(),23);await page.screenshot({path:path.join(out,'HardEarner-2.13-learn.png')});
+  await page.getByRole('button',{name:'Learn FAST',exact:true}).click();await page.locator('.fast-step').last().waitFor();assert.equal(await page.locator('.fast-step').count(),27);await page.screenshot({path:path.join(out,'HardEarner-2.13-learn.png')});
 
   await page.getByRole('button',{name:'Holdings',exact:true}).click();await page.getByText('Includes purchase fees',{exact:true}).waitFor();assert((await page.locator('.holdings-panel').innerText()).includes('1,000,000.00'));await page.getByRole('button',{name:'Purchase log BTC (Kraken)',exact:true}).click();await page.locator('.purchase-log-table').waitFor();assert.equal(await page.locator('.purchase-log-table tbody tr').count(),2);await page.screenshot({path:path.join(out,'HardEarner-2.13-purchases.png')});
 
-  await page.getByRole('button',{name:'Self Analysis',exact:true}).click();await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);
+  const parent=page;const child=app.waitForEvent('window');await page.getByRole('button',{name:'Self Analysis',exact:true}).click();page=await child;page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));await page.locator('.research-shell').waitFor();await page.getByRole('button',{name:'Charts',exact:true}).click();await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);
 
   await page.getByRole('button',{name:'Freehand pen 1',exact:true}).click();const box=await page.locator('.drawing-input').boundingBox();assert(box.width>500);await page.mouse.move(box.x+130,box.y+120);await page.mouse.down();for(let i=0;i<30;i++)await page.mouse.move(box.x+130+i*8,box.y+120+Math.sin(i/4)*45);await page.mouse.up();await page.locator('.drawing-overlay polyline[data-drawing-id]').waitFor();
 
@@ -95,21 +96,21 @@ async function stop(){await app.close()}
 
   // Deliver genuine-shaped stream updates to the real renderer and verify the last candle changes without a fetch.
 
-  await app.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0],time=Math.floor(Date.now()/3600000)*3600;for(const [id]of global.chartIds)win.webContents.send('analysis-stream',{id,status:'live',bar:{time,open:100,high:112,low:90,close:112,volume:20},tick:{price:112,at:Date.now()},mode:'trades',receivedAt:Date.now()})});
+  await app.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().endsWith('#research')),time=Math.floor(Date.now()/3600000)*3600;for(const [id]of global.chartIds)win.webContents.send('analysis-stream',{id,status:'live',bar:{time,open:100,high:112,low:90,close:112,volume:20},tick:{price:112,at:Date.now()},mode:'trades',receivedAt:Date.now()})});
 
   await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel').dataset.lastPrice)===112);
 
-  await page.getByLabel('Chart interval 1').selectOption('1s');await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);
+  await page.getByText('Data source',{exact:true}).click();await page.getByRole('button',{name:'1s',exact:true}).click();await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);
 
-  await page.getByLabel('Market type 1').selectOption('metal');await page.waitForFunction(()=>document.querySelector('.analysis-chart-panel')?.textContent.includes('Gold API'));
+  await page.getByLabel('Choose chart market 1',{exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Precious Metals',exact:true}).click();await page.locator('.market-picker-results button').filter({hasText:'XAU'}).click();await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);if(!await page.locator('.chart-feed-options').getAttribute('open').then(v=>v!==null))await page.locator('.chart-feed-options summary').click();await page.getByRole('button',{name:'Spot session',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.analysis-chart-panel')?.textContent.includes('Gold API'));
 
-  assert.equal(await page.getByLabel('Chart source 1').inputValue(),'goldapi');assert.equal(await page.getByRole('button',{name:'1 week',exact:true}).isDisabled(),true);await page.screenshot({path:path.join(out,'HardEarner-2.13-metal-session.png')});
+  assert.equal((await page.evaluate(()=>hardearner.analysisLoad())).panels[0].venue,'goldapi');assert.equal(await page.getByRole('button',{name:'1 week',exact:true}).isDisabled(),true);await page.screenshot({path:path.join(out,'HardEarner-2.13-metal-session.png')});
 
-  await page.getByRole('button',{name:'Import USD alerts',exact:true}).click();await page.getByLabel('Price alert table',{exact:true}).fill('BTC,82000,87500\nETH,2600,-\nSOL,114,-\nHYPE,88,-\nJUP,0.28,0.34\nPEPE,0.00000395,0.00000480\nDOGE,0.092,0.106\nNEAR,3.80,5.40\nXRP,1.46,1.66\nAAVE,138,-\nLINK,12.70,-\nSUI,0.95,-\nXLM,0.20,-\nBONK,0.00000320,-');await page.getByRole('button',{name:'Preview alerts',exact:true}).click();assert.equal(await page.getByRole('dialog').locator('tbody tr').count(),20);await page.screenshot({path:path.join(out,'HardEarner-2.13-alert-preview.png')});await page.getByRole('button',{name:'Arm all alerts (20)',exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});const alerts=(await page.evaluate(()=>window.hardearner.analysisLoad())).alerts;assert.equal(alerts.length,20);assert(alerts.every(a=>a.config.quote==='USD'));
+  await page.getByRole('button',{name:'Price alerts',exact:true}).click();await page.getByRole('button',{name:'Import USD alerts',exact:true}).click();await page.getByLabel('Price alert table',{exact:true}).fill('BTC,82000,87500\nETH,2600,-\nSOL,114,-\nHYPE,88,-\nJUP,0.28,0.34\nPEPE,0.00000395,0.00000480\nDOGE,0.092,0.106\nNEAR,3.80,5.40\nXRP,1.46,1.66\nAAVE,138,-\nLINK,12.70,-\nSUI,0.95,-\nXLM,0.20,-\nBONK,0.00000320,-');await page.getByRole('button',{name:'Preview alerts',exact:true}).click();assert.equal(await page.getByRole('dialog').locator('tbody tr').count(),20);await page.screenshot({path:path.join(out,'HardEarner-2.13-alert-preview.png')});await page.getByRole('button',{name:'Arm all alerts (20)',exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});const alerts=(await page.evaluate(()=>window.hardearner.analysisLoad())).alerts;assert.equal(alerts.length,20);assert(alerts.every(a=>a.config.quote==='USD'));
 
   await page.locator('.alerts-panel').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'HardEarner-2.13-alerts.png')});
 
-  await page.evaluate(()=>window.hardearner.authLock());await page.locator('.app-lock-card').waitFor();assert.equal(await page.locator('.analysis-workspace').count(),0);assert.equal(await page.locator('.wallet-table').count(),0);for(const method of ['load','connections','analysisLoad','performance','securities'])assert(await page.evaluate(async method=>{try{await window.hardearner[method]();return false}catch(e){return e.message.includes('Unlock')}},method));
+  await page.evaluate(()=>window.hardearner.authLock());await page.locator('.app-lock-card').waitFor();assert.equal(await page.locator('.analysis-workspace').count(),0);await parent.locator('.app-lock-card').waitFor();assert.equal(await page.locator('.wallet-table').count(),0);for(const method of ['load','connections','analysisLoad','performance','securities'])assert(await page.evaluate(async method=>{try{await window.hardearner[method]();return false}catch(e){return e.message.includes('Unlock')}},method));
 
   await page.screenshot({path:path.join(out,'HardEarner-2.13-locked.png')});
 
@@ -125,7 +126,7 @@ async function stop(){await app.close()}
 
  }
 
- assert.deepEqual(errors,[]);console.log('PASS: tradespot costs and UI purchase log, equal-size Manage controls, 23 Learn FAST lessons, 20 USD alerts via UI and persistence, setup/unlock/IPC lock, freehand + horizontal rendering and zoom, live updates, 1s candles, metal session, encrypted Kraken connection and drawings retained over two restarts.');console.log('Isolated profile: '+profile);
+ assert.deepEqual(errors,[]);console.log('PASS: tradespot costs and UI purchase log, equal-size Manage controls, 27 Learn FAST lessons, 20 USD alerts via UI and persistence, setup/unlock/IPC lock, freehand + horizontal rendering and zoom, live updates, 1s candles, metal session, encrypted Kraken connection and drawings retained over two restarts.');console.log('Isolated profile: '+profile);
 
 })().catch(async e=>{console.error(e);if(page)console.error((await page.locator('body').innerText().catch(()=>'' )).slice(0,5000));if(app)await app.close().catch(()=>{});process.exitCode=1});
 

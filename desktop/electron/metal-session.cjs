@@ -4,7 +4,7 @@ function createMetalSessions({requester=request,now=Date.now}={}){
  const sessions=new Map(),pending=new Map();
  async function sample(asset){
   if(!['XAU','XAG','XPT','XPD'].includes(asset))throw Error('Choose gold, silver, platinum or palladium.');
-  const prior=sessions.get(asset);if(prior&&now()-prior.fetchedAt<5000)return structuredClone(prior);
+  const prior=sessions.get(asset);if(prior&&now()-prior.fetchedAt<30000)return structuredClone(prior);
   if(pending.has(asset))return pending.get(asset);
   const job=(async()=>{
    const d=await requester('https://api.gold-api.com/price/'+asset),price=Number(d.price),at=Date.parse(d.updatedAt);

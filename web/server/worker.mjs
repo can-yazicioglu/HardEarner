@@ -1,21 +1,23 @@
 import {securitiesData} from './securities-data.mjs';
+import {assetHeaders} from './security-headers.mjs';
 import {authenticate} from './access.mjs';
 import {boundedJson,requireSameOrigin,json,HttpError} from './http.mjs';
 import {MAX_CIPHERTEXT} from '../shared/envelope.mjs';
 import market from '../../desktop/electron/market.cjs';
 import analysis from '../../desktop/electron/analysis.cjs';
+import research from '../../desktop/electron/research.cjs';
 import metals from '../../desktop/electron/metal-session.cjs';
 import {validAssetSymbol} from '../../desktop/electron/asset-symbol.cjs';
 export {UserVault} from './user-vault.mjs';
 export async function handle(request,env,identity){
   const url=new URL(request.url);
   if(url.pathname.startsWith('/api/')&&url.search)throw new HttpError(400,'Parameters belong in the request body.');
-  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.13.1-web',closedBrowserAlerts:false});
+  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.14.0-web',closedBrowserAlerts:false});
   const vault=env.VAULTS.getByName(identity.id);
   if(url.pathname==='/api/vault'&&request.method==='GET')return json(vault?await vault.read():null);
   if(!url.pathname.startsWith('/api/')){
     if(request.method!=='GET'&&request.method!=='HEAD')throw new HttpError(405,'Method not allowed.');
-    const response=await env.ASSETS.fetch(request),headers=new Headers(response.headers);
+    const response=await env.ASSETS.fetch(request),headers=assetHeaders(new Headers(response.headers),url.pathname);
     // All routes, including static files and alternate hosts, require verified Access identity.
     headers.set('Cache-Control','private, no-store');headers.set('X-Robots-Tag','noindex, nofollow, noarchive');
     return new Response(response.body,{status:response.status,headers});
@@ -41,6 +43,7 @@ export async function handle(request,env,identity){
       case 'analysisHistory':value=await analysis.history(...args);break;
       case 'quote':value=await analysis.quote(...args);break;
       case 'metalSession':value=await metals.sample(...args);break;
+      case 'research':if(args.length)throw new HttpError(400,'Research does not accept account data.');value=await research.overview();break;
       default:throw new HttpError(400,'Unsupported market operation.');
     }
     return json(value);

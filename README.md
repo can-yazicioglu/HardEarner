@@ -3,8 +3,8 @@
 <p align="center">
   <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://img.shields.io/badge/CI-GitHub_Actions-315f9f?logo=githubactions&amp;logoColor=white" /></a>
   <img alt="Status: Private preview" src="https://img.shields.io/badge/status-private_preview-263f68" />
-  <img alt="Windows desktop 2.13.0" src="https://img.shields.io/badge/desktop-2.13.0-315f9f" />
-  <img alt="Private web 2.13.1" src="https://img.shields.io/badge/web-2.13.1-315f9f" />
+  <img alt="Windows desktop 2.14.0" src="https://img.shields.io/badge/desktop-2.14.0-315f9f" />
+  <img alt="Private web 2.14.0" src="https://img.shields.io/badge/web-2.14.0-315f9f" />
   <img alt="License: Proprietary" src="https://img.shields.io/badge/license-proprietary-51617a" />
 </p>
 
@@ -28,7 +28,7 @@ This repository contains the Windows application and private website together. T
 | **Holdings** | Combines physical assets, manual purchases and included connected accounts; values the portfolio in TRY, USD, GBP and EUR. |
 | **Purchase history** | Shows dated lots, known costs, purchase and conversion evidence, fees and sale estimates. Supported transfers preserve cost provenance when matching evidence exists. Missing history stays explicitly incomplete. |
 | **Performance** | Daily portfolio and asset logs, fee and tax records, and favourites that include held assets. Tracking starts from available evidence; it does not invent a complete historical portfolio. |
-| **Self Analysis** | Streamed crypto candles, multiple charts, trade markers, horizontal/vertical lines, freehand drawings, notes and price alerts. |
+| **HardEarner Research** | A dedicated window with a market overview, rankings, dominance, TVL, heatmap, news and screeners. Personal charts retain streamed crypto candles, four metals, exact trade popups, drawings, notes and alerts. |
 | **Stocks, ETFs & funds** | Instrument search, watchlists, comparisons, listing metadata and source-labelled market data, plus supported read-only investment account access. |
 | **Private workspace** | App lock, encrypted storage, backups, recovery controls and separate web vaults per invited user. |
 | **Learn FAST** | In-app walkthroughs and FAQ covering purchases, connections, cost gaps, analysis, alerts and vault recovery. |
@@ -39,9 +39,11 @@ The default language is Turkish and the default display currency is TRY. English
 
 These are captures of the actual application running with **synthetic test data**, not personal financial records or design mockups.
 
-### Analysis, with room to think
+### A dedicated research desk
 
-![Self Analysis with streamed candles, visible drawings and USD alerts](docs/media/analysis.png)
+![HardEarner Research with synthetic market overview data](docs/media/research.png)
+
+![Exact purchase details on a personal chart with synthetic trades](docs/media/analysis.png)
 
 ### Investments in the same workspace
 
@@ -121,7 +123,7 @@ HardEarner/
 | Web vault | Web Crypto, AES-256-GCM, PBKDF2-SHA-256 with 600,000 iterations |
 | Tooling | Node.js 24, esbuild, Node test runner, Playwright |
 
-The [architecture guide](docs/architecture.md) explains the shared code and trust boundaries.
+The [architecture guide](docs/architecture.md) explains the shared code and trust boundaries. [Research sources and limitations](docs/research.md) document chart units, refresh rates and the isolated third-party widgets.
 
 ## Verification
 
@@ -131,9 +133,9 @@ node desktop/node_modules/playwright/cli.js install chromium webkit
 npm run test:web-ui
 ```
 
-- **199 unit/integration tests** across the shared desktop core and web services.
-- **Six web UI runs** across Chromium and WebKit, including vault sync, conflicting saves, recovery, investments, drawings and streamed chart updates.
-- Responsive checks cover **12 routes at four widths**, from phone to desktop.
+- **209 unit/integration tests** across the shared desktop core and web services.
+- **Eight web UI runs** across Chromium and WebKit, including vault sync, conflicting saves, recovery, investments, drawings and streamed chart updates.
+- Responsive checks cover **11 portfolio routes and six Research sections at four widths**, from phone to desktop.
 - Optional Windows Electron tests cover isolated profiles, restart persistence and the desktop interface: `npm run test:desktop-ui`.
 
 CI builds both targets on Windows and Linux, then runs the web UI checks on Linux. Provider responses are fixtures; passing these tests is not a claim that every live financial account or API is available in every region.

@@ -36,7 +36,7 @@ async function history(asset,type,days,currency='TRY'){
   const rows=await json(`https://api.frankfurter.dev/v2/rates?base=${encodeURIComponent(asset)}&quotes=${quote}&from=${from}`);
   result={points:rows.map(r=>({time:Date.parse(r.date),value:r.rate/(type==='metal'?OZ:1)})),currency:quote,unit:type==='metal'?'pure gram':'unit',source:'Frankfurter · daily reference history',note:type==='metal'?'Daily reference prices per pure gram. The live spot quote can differ.':'Daily reference rates, not intraday bank dealing prices.'};
  }
- result.points=result.points.filter(p=>positive(p.value)&&Number.isFinite(p.time)).sort((a,b)=>a.time-b.time);if(!result.points.length)throw Error('No historical prices returned.');result.cachedAt=Date.now();chartCache.set(key,result);return result;
+ result.points=[...new Map(result.points.filter(p=>positive(p.value)&&Number.isFinite(p.time)&&p.time<=Date.now()+86400000).map(p=>[p.time,p])).values()].sort((a,b)=>a.time-b.time);if(!result.points.length)throw Error('No historical prices returned.');result.cachedAt=Date.now();chartCache.set(key,result);return result;
 }
 const activityCache=new Map();
 async function activity(asset){

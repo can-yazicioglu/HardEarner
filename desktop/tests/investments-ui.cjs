@@ -55,6 +55,7 @@ async function launch(){
 
    if(u.hostname==='api.gold-api.com')return reply({symbol:u.pathname.split('/').at(-1),price:3100,updatedAt:new Date().toISOString()});
 
+   if(u.hostname==='api.frankfurter.dev'&&u.searchParams.get('from'))return reply(Array.from({length:260},(_,i)=>({date:new Date(Date.now()-(260-i)*86400000).toISOString().slice(0,10),base:u.searchParams.get('base'),quote:'USD',rate:3000+i})));
    if(u.hostname==='api.frankfurter.dev')return reply(['TRY','GBP','EUR'].map(quote=>({date:u.searchParams.get('date')||'2026-09-25',base:'USD',quote,rate:{TRY:40,GBP:.8,EUR:.9}[quote]})));
 
    if(u.pathname.endsWith('/ticker/24hr'))return reply([{symbol:'BTCUSDT',lastPrice:'100',bidPrice:'99',askPrice:'101',count:1,closeTime:Date.now()}]);
@@ -99,12 +100,12 @@ async function stop(){await app.close()}
   await page.getByRole('button',{name:'Holdings',exact:true}).click();await page.getByRole('button',{name:'Performance',exact:true}).click();await page.getByRole('button',{name:'Fees & taxes',exact:true}).click();await page.getByText('CURRENCY_CONVERSION_FEE',{exact:true}).waitFor();
   await page.screenshot({path:path.join(out,'HardEarner-2.13-fees.png')});await page.getByRole('button',{name:'Daily log',exact:true}).click();await page.getByLabel('Performance asset',{exact:true}).waitFor();
   await page.locator('aside').getByRole('button',{name:'Stocks & funds',exact:true}).click();await page.locator('.investment-screener .asset-link').filter({hasText:'Apple Inc.'}).click();
-  await page.getByRole('button',{name:'Analyse & draw',exact:true}).click();await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);
-  assert.equal(await page.getByLabel('Chart source 1').inputValue(),'securities');
+  const parent=page,child=app.waitForEvent('window');await page.getByRole('button',{name:'Analyse & draw',exact:true}).click();page=await child;page.on('pageerror',e=>errors.push(e.message));await page.locator('.research-shell').waitFor();await page.getByRole('button',{name:'Charts',exact:true}).click();await page.waitForFunction(()=>Number(document.querySelector('.analysis-chart-panel')?.dataset.lastPrice)>0);
+  assert.equal((await page.evaluate(()=>hardearner.analysisLoad())).panels[0].venue,'securities');
   await page.locator('.chart-trades summary').click();assert.equal(await page.locator('.chart-trades tbody tr').count(),1);assert((await page.locator('.chart-trades').innerText()).includes('Trading 212'));assert((await page.locator('.chart-trades').innerText()).includes('100.00'));
   await page.screenshot({path:path.join(out,'HardEarner-2.13-trade-markers.png')});
   await page.getByRole('button',{name:'Horizontal line 1',exact:true}).click();await page.locator('.drawing-input').click({position:{x:300,y:150}});await page.waitForFunction(()=>document.querySelectorAll('.drawing-overlay line').length===1);assert(Number.isFinite(Number(await page.locator('.drawing-overlay line').getAttribute('y1'))));
-  await page.locator('.language-select').selectOption('tr');await page.locator('aside').getByRole('button',{name:'Hisseler ve fonlar',exact:true}).click();await page.screenshot({path:path.join(out,'HardEarner-2.13-investments-tr.png')});
+  await page.getByLabel('Back to portfolio',{exact:true}).click();page=parent;await page.locator('.language-select').selectOption('tr');await page.locator('aside').getByRole('button',{name:'Hisseler ve fonlar',exact:true}).click();await page.screenshot({path:path.join(out,'HardEarner-2.13-investments-tr.png')});
   await page.locator('.language-select').selectOption('en');await page.getByRole('button',{name:'Learn FAST',exact:true}).click();await page.getByLabel('Search lessons',{exact:true}).fill('daily');assert(await page.locator('.fast-step').count()>0);assert(await page.locator('.fast-step').count()<23);
  }catch(e){console.error(e);console.error((await page.locator('body').innerText()).slice(-9000));await page.screenshot({path:path.join(out,'HardEarner-2.13-test-failure.png'),timeout:5000}).catch(()=>{});throw e}finally{await stop()}
  await launch();try{await unlock();const accounts=await page.evaluate(()=>window.hardearner.connections());assert.equal(accounts.connections[0].kind,'trading212');const s=await page.evaluate(()=>window.hardearner.securities());assert.equal(s.configured,true);assert.equal(s.instruments[0].isin,'US0378331005');assert.equal(s.quotes[s.instruments[0].id].price,100);assert.equal((await page.evaluate(()=>window.hardearner.performance('TRY'))).error,null);const a=await page.evaluate(()=>window.hardearner.analysisLoad());assert.equal(Object.values(a.drawings)[0].length,1)}finally{await stop()}

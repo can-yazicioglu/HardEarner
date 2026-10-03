@@ -47,13 +47,14 @@ async function main(){
  const common={bundle:true,nodePaths:[resolveLocal('../desktop/node_modules'),resolveLocal('node_modules')],logLevel:'warning'};
  await esbuild.build({...common,entryPoints:['client/entry.jsx'],platform:'browser',target:['safari16.4'],outfile:'dist/app.js',minify:true,define:{'process.env.NODE_ENV':'"production"'},plugins:[adapters(true)]});
  await esbuild.build({...common,entryPoints:['server/worker.mjs'],platform:'node',target:'es2022',format:'esm',outfile:'build/worker.mjs',external:['node:*','cloudflare:workers'],inject:['server/platform-fetch.mjs'],plugins:[adapters(false)]});
+
  for(const name of ['icon-192.png','icon-512.png','apple-touch-icon.png'])fs.copyFileSync('public/'+name,'dist/'+name);
  const version=crypto.createHash('sha256').update(fs.readFileSync('dist/app.js')).digest('hex').slice(0,12);
  fs.writeFileSync('dist/index.html',`<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1528"><link rel="icon" href="/icon-192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/app.css?v=${version}"><title>HardEarner · Private</title></head><body><div id="root"></div><noscript>JavaScript is required for your encrypted private vault.</noscript><script src="/app.js?v=${version}"></script></body></html>`);
  fs.writeFileSync('dist/manifest.webmanifest',JSON.stringify({name:'HardEarner Private',short_name:'HardEarner',start_url:'/',display:'standalone',theme_color:'#0b1528',background_color:'#080f20',icons:[{src:'/icon-192.png',sizes:'192x192',type:'image/png'},{src:'/icon-512.png',sizes:'512x512',type:'image/png'}]}));
- fs.writeFileSync('dist/_headers',"/*\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' wss://data-stream.binance.vision wss://ws.okx.com:8443; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  X-Robots-Tag: noindex, nofollow\n");
+ fs.writeFileSync('dist/_headers',"/*\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' wss://data-stream.binance.vision wss://ws.okx.com:8443; frame-src https://www.tradingview-widget.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  X-Robots-Tag: noindex, nofollow\n");
  fs.copyFileSync('client/privacy.html','dist/privacy.html');
- console.log('Built HardEarner web 2.13.1 from the shared desktop 2.13 UI and accounting core.');
+ console.log('Built HardEarner web 2.14.0 from the shared desktop 2.14 UI and accounting core.');
 }
 module.exports={adapters,main};
 if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1});
