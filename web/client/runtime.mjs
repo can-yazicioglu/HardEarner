@@ -13,7 +13,8 @@ import {deriveKey,newSalt,seal,open} from './crypto.mjs';
 import {WEB_VERSION,BACKUP_FORMAT,encryptedBackup,readBackup,backupSummary,holdingsCSV} from './vault-files.mjs';
 
 let identity,remote,key,salt,data,analysis,cache,market={},busy=false,queue=Promise.resolve(),pendingRemote=false;
-let securities;
+let securities,researchWorkspace;
+import researchWorkspaceCore from '../../desktop/electron/research-workspace.cjs';
 let lastSaved=null,sessionError=null,refreshing=null,pendingSave=null,noticeBuffer=null;
 let generation=0,restoreCandidate=null,preferredLanguage='tr';
 const requests=new Set();
@@ -39,12 +40,15 @@ function checkSession(expected){requireUnlocked();if(expected!==generation)throw
 function install(next){
   if(next?.version!==1||!Array.isArray(next.connections?.connections))throw Error('This vault format is not supported. It was not reset.');
   next.portfolio=domain.validateState(next.portfolio);data=next;preferredLanguage=next.portfolio.settings.language;
-  const files={...(next.analysis?{'analysis.encrypted':next.analysis}:{}),...(next.securities?{'securities.encrypted':next.securities}:{})};snapshotStore.setSnapshot(files);securities=securitiesCore.createSecurities({dir:'/',safeStorage:{isEncryptionAvailable:()=>true},fetcher:async url=>{const u=new URL(url),d=await request('/api/securities-data',{endpoint:u.pathname,parameters:Object.fromEntries(u.searchParams)});return{ok:true,json:async()=>d}}});if(securities.view().error)throw Error(securities.view().error);
+  researchWorkspace?.stop();
+  const files={...(next.research?{'research.encrypted':next.research}:{}),...(next.analysis?{'analysis.encrypted':next.analysis}:{}),...(next.securities?{'securities.encrypted':next.securities}:{})};snapshotStore.setSnapshot(files);securities=securitiesCore.createSecurities({dir:'/',safeStorage:{isEncryptionAvailable:()=>true},fetcher:async url=>{const u=new URL(url),d=await request('/api/securities-data',{endpoint:u.pathname,parameters:Object.fromEntries(u.searchParams)});return{ok:true,json:async()=>d}}});if(securities.view().error)throw Error(securities.view().error);
+  researchWorkspace=researchWorkspaceCore.createResearchWorkspace({dir:'/',safeStorage:{isEncryptionAvailable:()=>true},query:(kind,selection,keys)=>request('/api/research',{kind,selection,keys}),notify:a=>{const args=['Research · '+a.asset+' · '+a.metric,a.event.value+' · '+a.condition+' '+a.threshold];if(noticeBuffer)noticeBuffer.push(args);else notice(...args);}});
+  if(researchWorkspace.view().error)throw Error(researchWorkspace.view().error);
   analysis=analysisCore.createAnalysis({dir:'/',safeStorage:{isEncryptionAvailable:()=>true},getQuote:c=>marketCall('quote',c),notify:a=>{const args=[`${a.intent} · ${a.config.asset}/${a.config.quote}`,`${a.observed} · ${a.condition} ${a.price}`];if(noticeBuffer)noticeBuffer.push(args);else notice(...args);}});
   if(analysis.view().error)throw Error(analysis.view().error);
   data.analysis=analysis.view();delete data.analysis.error;delete data.analysis.lastCheck;delete data.analysis.checkError;
 }
-function capture(){const next=clone(data);next.securities=snapshotStore.getSnapshot()['securities.encrypted'];next.analysis=analysis.view();delete next.analysis.error;delete next.analysis.lastCheck;delete next.analysis.checkError;return next;}
+function capture(){const next=clone(data);next.research=snapshotStore.getSnapshot()['research.encrypted'];next.securities=snapshotStore.getSnapshot()['securities.encrypted'];next.analysis=analysis.view();delete next.analysis.error;delete next.analysis.lastCheck;delete next.analysis.checkError;return next;}
 async function persist(){
   requireUnlocked();const epoch=generation,next=capture(),envelope=await seal(next,key,salt,identity.id),requestId=crypto.randomUUID();checkSession(epoch);
   // Encrypted pending copy survives network errors without exposing API credentials.
@@ -87,7 +91,7 @@ async function recoverPending(mode,password){
     install(decoded);key=candidate;salt=pendingSave.envelope.salt;remote={revision:result.revision,envelope:pendingSave.envelope};await cache.write([['saved',remote],['pending',null,null,false]]);checkSession(epoch);pendingSave=null;sessionError=null;lastSaved=result.savedAt;for(const f of cloudListeners)f();
   }catch(e){if(epoch===generation)sessionError=e.message;throw e;}finally{if(epoch===generation){busy=false;notifyCloud();}}
 }
-function clearSession(){generation++;for(const r of requests)r.abort();requests.clear();streams.stopAll();streamListeners.clear();key=null;data=null;analysis=null;securities=null;restoreCandidate=null;market={};busy=false;noticeBuffer=null;snapshotStore.setSnapshot({});}
+function clearSession(){generation++;for(const r of requests)r.abort();requests.clear();streams.stopAll();researchWorkspace?.stop();researchWorkspace=null;streamListeners.clear();key=null;data=null;analysis=null;securities=null;restoreCandidate=null;market={};busy=false;noticeBuffer=null;snapshotStore.setSnapshot({});}
 async function lock(){clearSession();authChanged();}
 async function changePassword(current,password,confirmation){
   const epoch=generation;await queue;checkSession(epoch);if(busy||pendingSave)throw Error('Finish the pending save before changing the password.');if(password!==confirmation)throw Error('Passwords do not match.');
@@ -134,6 +138,9 @@ function pickBackup(){return new Promise((resolve,reject)=>{const input=document
 function notice(title,body){if(!key)return;window.dispatchEvent(new CustomEvent('hardearner-notice',{detail:title+' · '+body}));if('Notification'in window&&Notification.permission==='granted')try{new Notification(title,{body,icon:'/icon-192.png'});}catch{}}
 const links={privacy:'/privacy.html',support:'https://desktop.hardearner.com/',monzo:'https://developers.monzo.com/',starling:'https://developer.starlingbank.com/get-started',tradingview:'https://www.tradingview.com/',binance:'https://www.binance.com/en/my/settings/api-management',binancetr:'https://www.binance.tr/apidocs/',binancetrStatements:'https://www.binance.tr/usercenter/account-statement',btcturk:'https://docs.btcturk.com/',paribu:'https://www.paribu.com/destek/security/api-keys',kraken:'https://support.kraken.com/articles/360000919966-how-to-create-an-api-key',coinbase:'https://portal.cdp.coinbase.com/',okx:'https://www.okx.com/account/my-api',trading212:'https://docs.trading212.com/',twelvedata:'https://twelvedata.com/account/api-keys',midas:'https://www.getmidas.com/',garanti:'https://www.garantibbva.com.tr/yatirim',erste:'https://www.sparkasse.at/erstebank/privatkunden/sparen-anlegen/wertpapiere',finviz:'https://finviz.com/screener.ashx',fintables:'https://fintables.com/',justetf:'https://www.justetf.com/en/find-etf.html',tefas:'https://www.tefas.gov.tr/FonKarsilastirma.aspx'};
 window.hardearner=Object.freeze({
+  researchState:async()=>{requireUnlocked();return researchWorkspace.view();},
+  researchSettings:(action,value)=>mutate(()=>researchWorkspace.mutate(action,value)),
+  researchQuery:(kind,input)=>kind==='liquidations'?(requireUnlocked(),researchWorkspace.query(kind,input)):mutate(()=>researchWorkspace.query(kind,input)),
   research:()=>marketCall('research'),researchLink:async key=>window.open(researchLink(key),'_blank','noopener,noreferrer'),
   openResearch:async()=>{window.open(location.origin+'/#research','_blank','noopener,noreferrer');return true},closeResearch:async()=>{location.hash='';location.reload();return true},
   platform:'private-web',performance:async c=>performanceView(c),securities:async()=>{requireUnlocked();return securities.view()},securitiesKey:k=>mutate(()=>securities.setKey(k)),securitiesAdd:i=>mutate(()=>securities.add(i)),securitiesFacts:(id,v)=>mutate(()=>securities.facts(id,v)),securitiesSearch:async q=>{requireUnlocked();return securities.search(q)},securitiesQuote:id=>mutate(async()=>{const d=await securities.quote(id);market.securities=d.quotes;return d}),securitiesHistory:async(id,days)=>{requireUnlocked();return securities.history(id,days)},authStatus:()=>bootstrap.then(status),authSetup:unlock,authUnlock:unlock,authLock:lock,
@@ -165,7 +172,7 @@ window.hardearner=Object.freeze({
   supportReport:async text=>{requireUnlocked();const feeds=Object.fromEntries(Object.entries(market.status||{}).map(([name,s])=>[name,{ok:!!s.ok,at:s.at||s.fetchedAt||null}]));return download('HardEarner-private-issue.txt','HardEarner '+WEB_VERSION+' Web\n'+new Date().toISOString()+'\n'+String(text).slice(0,5000)+'\n\nFeed availability: '+JSON.stringify(feeds)+'\nNo balances or account keys were automatically included.','text/plain')}
 });
 setInterval(async()=>{if(!key||busy||pendingSave||document.hidden)return;const epoch=generation;try{const head=await request('/api/vault');checkSession(epoch);if(busy)return;if(head.revision!==remote.revision){pendingRemote=true;notifyCloud();if(!document.querySelector('[role="dialog"],input:focus,textarea:focus,select:focus'))await pull();}}catch(e){if(epoch===generation){sessionError=e.message;notifyCloud();}}},30000);
-setInterval(async()=>{if(!key||busy||document.hidden)return;try{await mutate(async()=>{await analysis.check();return true;});}catch{}},30000);
+setInterval(async()=>{if(!key||busy||document.hidden)return;try{await mutate(async()=>{await analysis.check();await researchWorkspace.check();return true;});}catch{}},30000);
 setInterval(async()=>{if(!key||busy||pendingSave||document.hidden)return;const epoch=generation;for(const c of [...data.connections.connections]){if(epoch!==generation||pendingSave||pendingRemote)break;try{await accountCall('syncAccount',c.id,{automatic:true});}catch{/* One provider failure must not skip other accounts. */}}},300000);
 window.addEventListener('pagehide',()=>{clearSession();authChanged();});
 window.addEventListener('pageshow',event=>{if(event.persisted)authChanged();});

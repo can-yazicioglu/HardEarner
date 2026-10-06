@@ -24,8 +24,8 @@ The root has no dependency installation of its own. Setup runs `npm ci` separate
 | `npm run start:desktop` | Launches Windows Electron with a separate development profile. |
 | `npm run demo:web` | Starts the local, temporary web test harness at `http://127.0.0.1:8794`. |
 | `npm test` | Runs desktop and web unit/integration tests, preparing the test Worker first. |
-| `npm run test:web-ui` | Starts and stops its own local server; runs three suites in both Chromium and WebKit. |
-| `npm run test:desktop-ui` | Runs two Electron UI suites with synthetic providers and separate temporary profiles. |
+| `npm run test:web-ui` | Starts and stops its own local server; runs five suites in both Chromium and WebKit. |
+| `npm run test:desktop-ui` | Runs three Electron UI suites with synthetic providers and separate temporary profiles. |
 
 Prepare browser engines with:
 
@@ -49,7 +49,9 @@ Neither tests nor CI deploy the website, sign packages, submit to Microsoft or m
 
 ## Test coverage
 
-The initial repository snapshot contains 180 desktop/core tests and 19 web tests. Coverage includes money validation, acquisition lots, transfer matching, fees, provider response parsing, Kraken retries, streaming, investments, encrypted file recovery, vault identity, revision conflicts and bounded request handling.
+Version 2.15 contains 206 desktop/core tests and 22 web tests. Coverage includes money validation, acquisition lots, transfer matching, fees, provider response parsing, Kraken retries, streaming, investments, encrypted file recovery, vault identity, revision conflicts and bounded request handling.
+
+Research tests also cover funding percentages, open-interest side basis and history, ETF revisions, public-position changes, rate-limit isolation, liquidations, encrypted research settings and metric-alert cooldowns.
 
 Browser suites cover cross-device vault saves, separate identities, wrong-password rejection, encrypted backup/restore, password rotation, in-flight lock safety, visible pen/line drawings, streamed candle updates, alerts, securities and responsive navigation. Test evidence establishes behaviour against fixtures, not continuous live-provider availability.
 

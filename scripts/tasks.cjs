@@ -39,6 +39,7 @@ switch (process.argv[2]) {
   case 'desktop-ui':
     run(desktop, ['tests/hardearner-v213-ui.cjs']);
     run(desktop, ['tests/investments-ui.cjs']);
+    run(desktop, ['tests/research-insights-ui.cjs']);
     break;
   default:
     throw Error('Unknown task. Use the scripts in package.json.');

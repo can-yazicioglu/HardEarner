@@ -25,7 +25,7 @@ test('Research cache coalesces requests and preserves only dated old values when
 });
 test('A failing primary provider falls back with accurate attribution and no invented supply or sparklines',async()=>{
  const calls=[];let now=1e12,offline=false;
- const r=createResearch({now:()=>now,requester:async (url,options)=>{assert.match(options.headers['User-Agent'],/^HardEarner\/2\.14/);calls.push(url);if(offline||!url.includes('api.coinpaprika.com'))throw Error('rate limited');
+ const r=createResearch({now:()=>now,requester:async (url,options)=>{assert.equal(options.headers['User-Agent'],`HardEarner/${require('../package.json').version.split('.').slice(0,2).join('.')} (+https://desktop.hardearner.com/privacy)`);calls.push(url);if(offline||!url.includes('api.coinpaprika.com'))throw Error('rate limited');
   if(url.endsWith('/global'))return{market_cap_usd:1000,bitcoin_dominance_percentage:60,market_cap_change_24h:2,last_updated:now/1000};
   return[{id:'eth-ethereum',symbol:'ETH',name:'Ethereum',rank:2,quotes:{USD:{price:10,market_cap:100,percent_change_24h:-2,percent_change_7d:3}}},{id:'btc-bitcoin',symbol:'BTC',rank:1,quotes:{USD:{price:20,market_cap:600}}}];
  }});

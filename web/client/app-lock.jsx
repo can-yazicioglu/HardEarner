@@ -4,7 +4,7 @@ import {LockKeyhole,ShieldCheck,ArrowRight,Menu,X,Cloud,CloudAlert,Download,Uplo
 import {t as tr,setLanguage} from '../../desktop/src/i18n';
 import '../../desktop/src/app-lock.css';
 const api=window.hardearner;
-function Logo(){return <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#172e59"/><path d="M10 29V11h5v7h10v-7h5v18h-5v-7H15v7z" fill="#cedfff"/><path d="M21 11h9v9" stroke="#719fff" strokeWidth="3"/><path d="m19 22 10-10" stroke="#719fff" strokeWidth="3"/></svg>}
+function Logo(){return <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#531d2a"/><path d="M10 29V11h5v7h10v-7h5v18h-5v-7H15v7z" fill="#fbd2dc"/><path d="M21 11h9v9" stroke="#f27e99" strokeWidth="3"/><path d="m19 22 10-10" stroke="#f27e99" strokeWidth="3"/></svg>}
 export function AppGate({children}){
  const[s,setS]=useState(null),[password,setPassword]=useState(''),[again,setAgain]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[epoch,setEpoch]=useState(0),[cloud,setCloud]=useState({}),[menu,setMenu]=useState(false),[cloudOpen,setCloudOpen]=useState(false),[notices,setNotices]=useState([]),[host,setHost]=useState(null),[recoveryPassword,setRecoveryPassword]=useState('');
  useEffect(()=>{const receive=e=>setNotices(rows=>[...rows,{id:crypto.randomUUID(),text:String(e.detail)}].slice(-3)),close=e=>{if(e.key==='Escape'){setMenu(false);setCloudOpen(false)}};window.addEventListener('hardearner-notice',receive);window.addEventListener('keydown',close);return()=>{window.removeEventListener('hardearner-notice',receive);window.removeEventListener('keydown',close)}},[]);

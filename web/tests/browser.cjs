@@ -4,6 +4,7 @@ async function unlock(p){await p.getByLabel(/^(Kasa şifresi|Vault password)$/).
 async function run(engine,name){const browser=await engine.launch({headless:true});try{
  const a=await browser.newContext({viewport:{width:1440,height:1000}}),b=await browser.newContext({viewport:{width:1440,height:1000}}),other=await browser.newContext();
  await other.addCookies([{name:'test-user',value:'two',url:URL}]);
+ for(const context of [a,b,other])await context.route('**/api/research',r=>r.fulfill({json:{state:'unavailable',data:null,message:'Isolated legacy regression fixture'}}));
  for(const context of [a,b,other])await context.route('**/api/market',async route=>{const input=route.request().postDataJSON();
   if(input.op==='refresh')return route.fulfill({json:{fx:{USD:1,TRY:49,GBP:.75,EUR:.87},crypto:{BTC:{usd:80000,change:1},USDT:{usd:1},ONDO:{usd:.55}},metals:{XAU:{usd:3600}},status:{crypto:{ok:true},fx:{ok:true}}}});
   if(input.op==='analysisHistory'){const c=input.args[0],time=Math.floor(Date.now()/3600000)*3600;return route.fulfill({json:{...c,bars:Array.from({length:100},(_,i)=>({time:time-(100-i)*3600,open:80000+i,high:80010+i,low:79990+i,close:80002+i,volume:1})),source:'Synthetic UI test',fetchedAt:Date.now()}})}

@@ -1,5 +1,17 @@
 # Changes
 
+## 2.15.0 — Market intelligence, in Cherry Red
+
+- Extend Research with optional funding, open interest, observed liquidations, whale activity, ETF flows and on-chain valuation panels. Reuse asset search, favourites and charts without changing portfolio calculations.
+- Show Bybit settlement intervals, source timestamps, units, history limits and observed-session coverage. Keep modelled liquidation heatmaps separate from actual received events.
+- Add public Hyperliquid address observations, persisted size changes, evidence links and filters. Transfers are never assumed to be trades.
+- Add personal CoinGlass and Glassnode adapters with encrypted keys and clear plan/configuration states. These paid feeds require each user's permitted provider access; they are not bundled subscriptions.
+- Add metric reminders with duplicate prevention, cooldowns, stale-data protection and retained trigger history. Existing price alerts remain intact.
+- Replace the primary navy theme with Cherry Red, retain the logo design, and prevent bright Research frame/loading backgrounds.
+- Extend Learn FAST, privacy notices and provider documentation. Keep desktop and web storage/privacy behaviour intact.
+
+Windows, private web and source use version 2.15.0. Store certification and installation are separate from source publication and web deployment.
+
 ## 2.14.0 — Research workspace
 
 - Open a dedicated HardEarner Research window or browser tab with overview, charts, screeners, news, notes and alerts.

@@ -1,15 +1,15 @@
 <p align="center"><img src="docs/media/banner.svg" alt="HardEarner — Hard-Earned Money needs attention." width="100%" /></p>
 
 <p align="center">
-  <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://img.shields.io/badge/CI-GitHub_Actions-315f9f?logo=githubactions&amp;logoColor=white" /></a>
-  <img alt="Status: Private preview" src="https://img.shields.io/badge/status-private_preview-263f68" />
-  <img alt="Windows desktop 2.14.0" src="https://img.shields.io/badge/desktop-2.14.0-315f9f" />
-  <img alt="Private web 2.14.0" src="https://img.shields.io/badge/web-2.14.0-315f9f" />
+  <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://img.shields.io/badge/CI-GitHub_Actions-b92d50?logo=githubactions&amp;logoColor=white" /></a>
+  <img alt="Status: Private preview" src="https://img.shields.io/badge/status-private_preview-612137" />
+  <img alt="Windows desktop 2.15.0" src="https://img.shields.io/badge/desktop-2.15.0-b92d50" />
+  <img alt="Private web 2.15.0" src="https://img.shields.io/badge/web-2.15.0-b92d50" />
   <img alt="License: Proprietary" src="https://img.shields.io/badge/license-proprietary-51617a" />
 </p>
 
 <p align="center"><b>Your money lives in different places. Understanding it should happen in one.</b></p>
-<p align="center">A calm, navy-blue workspace for holdings, connected balances, purchase history and market analysis.<br/>Built by <a href="https://github.com/can-yazicioglu">Can Yazicioglu</a> for Windows and the private web.</p>
+<p align="center">A calm, Cherry Red workspace for holdings, connected balances, purchase history and market analysis.<br/>Built by <a href="https://github.com/can-yazicioglu">Can Yazicioglu</a> for Windows and the private web.</p>
 
 <p align="center"><a href="#inside-hardearner">Features</a> · <a href="#a-closer-look">Screenshots</a> · <a href="#run-locally">Run locally</a> · <a href="docs/architecture.md">Architecture</a> · <a href="docs/integrations.md">Integrations</a> · <a href="docs/roadmap.md">Roadmap</a></p>
 
@@ -29,6 +29,7 @@ This repository contains the Windows application and private website together. T
 | **Purchase history** | Shows dated lots, known costs, purchase and conversion evidence, fees and sale estimates. Supported transfers preserve cost provenance when matching evidence exists. Missing history stays explicitly incomplete. |
 | **Performance** | Daily portfolio and asset logs, fee and tax records, and favourites that include held assets. Tracking starts from available evidence; it does not invent a complete historical portfolio. |
 | **HardEarner Research** | A dedicated window with a market overview, rankings, dominance, TVL, heatmap, news and screeners. Personal charts retain streamed crypto candles, four metals, exact trade popups, drawings, notes and alerts. |
+| **Market intelligence** | Optional funding, open-interest, observed-liquidation, whale, BTC/ETH ETF flow and on-chain panels. Source coverage, history limits and missing access stay explicit. Personal provider keys use the encrypted vault; metric alerts have duplicate prevention and cooldowns. |
 | **Stocks, ETFs & funds** | Instrument search, watchlists, comparisons, listing metadata and source-labelled market data, plus supported read-only investment account access. |
 | **Private workspace** | App lock, encrypted storage, backups, recovery controls and separate web vaults per invited user. |
 | **Learn FAST** | In-app walkthroughs and FAQ covering purchases, connections, cost gaps, analysis, alerts and vault recovery. |
@@ -44,6 +45,12 @@ These are captures of the actual application running with **synthetic test data*
 ![HardEarner Research with synthetic market overview data](docs/media/research.png)
 
 ![Exact purchase details on a personal chart with synthetic trades](docs/media/analysis.png)
+
+### Optional market intelligence
+
+![Research data panels with synthetic funding and open interest](docs/media/insights.png)
+
+Read the [provider coverage, API access and research alert guide](docs/research-data.md). CoinGlass/Glassnode features need individual API entitlements; no paid-data integration is claimed live without one.
 
 ### Investments in the same workspace
 

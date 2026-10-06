@@ -2,6 +2,10 @@
 
 Self Analysis opens a dedicated Research window on Windows and a separate tab on the private website. It has six sections: Overview, Charts, Screener, News, Ideas & notes, and Price alerts. Returning to the portfolio does not replace its data. A new web tab needs its own vault unlock; encryption keys are not copied between tabs.
 
+## Optional market intelligence (2.15)
+
+Funding, open interest, observed liquidations, public whale evidence, BTC/ETH ETF flows and on-chain valuation extend the existing workspace. Enable individual panels below Overview or Charts; metric reminders appear beside existing Price alerts. The dark Cherry Red palette also applies to native window chrome, controls and widget loading surfaces. See [Research data integrations](research-data.md) for exact units, credentials, coverage, licensing and alert behaviour.
+
 ## Charts and exact executions
 
 **My chart** holds HardEarner drawings, freehand strokes, notes, alerts and transaction markers. Hover, focus or tap a B/S marker to see the recorded quantity, execution price, trade value, separately reported fees, source and time. A daily candle can group multiple executions. The popup retains each execution's original currency and venue; a USD execution must not be relabelled as a USDT trade. Manually entered dates remain labelled date-only.

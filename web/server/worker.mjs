@@ -5,6 +5,7 @@ import {boundedJson,requireSameOrigin,json,HttpError} from './http.mjs';
 import {MAX_CIPHERTEXT} from '../shared/envelope.mjs';
 import market from '../../desktop/electron/market.cjs';
 import analysis from '../../desktop/electron/analysis.cjs';
+import {researchData} from './research-data.mjs';
 import research from '../../desktop/electron/research.cjs';
 import metals from '../../desktop/electron/metal-session.cjs';
 import {validAssetSymbol} from '../../desktop/electron/asset-symbol.cjs';
@@ -12,7 +13,7 @@ export {UserVault} from './user-vault.mjs';
 export async function handle(request,env,identity){
   const url=new URL(request.url);
   if(url.pathname.startsWith('/api/')&&url.search)throw new HttpError(400,'Parameters belong in the request body.');
-  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.14.0-web',closedBrowserAlerts:false});
+  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.15.0-web',closedBrowserAlerts:false});
   const vault=env.VAULTS.getByName(identity.id);
   if(url.pathname==='/api/vault'&&request.method==='GET')return json(vault?await vault.read():null);
   if(!url.pathname.startsWith('/api/')){
@@ -24,13 +25,14 @@ export async function handle(request,env,identity){
   }
   if(!['POST','PUT'].includes(request.method))throw new HttpError(405,'Method not allowed.');
   requireSameOrigin(request);
-  const input=await boundedJson(request,url.pathname==='/api/securities-data'?16384:url.pathname==='/api/market'?100000:MAX_CIPHERTEXT+8192);
+  const input=await boundedJson(request,['/api/securities-data','/api/research'].includes(url.pathname)?16384:url.pathname==='/api/market'?100000:MAX_CIPHERTEXT+8192);
   if(url.pathname==='/api/vault'&&request.method==='PUT'){
     const result=await vault.write(input);return json(result,result.conflict?409:200);
   }
   if(url.pathname==='/api/accounts'&&request.method==='POST'){
     const result=await vault.account(input);return json(result,result.status||200);
   }
+  if(url.pathname==='/api/research'&&request.method==='POST')return json(await researchData(input));
   if(url.pathname==='/api/securities-data'&&request.method==='POST')return json(await securitiesData(input));
   if(url.pathname==='/api/market'&&request.method==='POST'){
     if(!input||!Array.isArray(input.args)||input.args.length>4)throw new HttpError(400,'Invalid market request.');

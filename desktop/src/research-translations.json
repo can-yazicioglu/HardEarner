@@ -534,5 +534,227 @@
   },
   "Search trends unavailable; showing traded volume instead.": {
     "tr": "Arama eğilimleri alınamıyor; işlem hacmi gösteriliyor."
+  },
+  "Choose your market evidence": {
+    "tr": "Piyasa kanıtlarını seçin"
+  },
+  "In Research, scroll to Market intelligence. Choose a cryptoasset with the existing market picker, star it, and enable only the panels you need. Funding shows the rate per settlement and its next time; open interest shows outstanding base-asset units and the change over your chosen period. USDT notional is not USD. Read the source, actual history range and timestamps before comparing.": {
+    "tr": "Araştırma ekranında Piyasa verileri bölümüne gidin. Mevcut varlık seçicisinden bir kripto varlık seçin, favorilere ekleyin ve yalnızca istediğiniz panelleri açın. Fonlama, uzlaşma başına oranı ve sonraki zamanı; açık pozisyon, varlık birimindeki açık sözleşmeleri ve seçilen dönemdeki değişimi gösterir. USDT tutarı USD değildir. Karşılaştırmadan önce kaynağı, gerçek geçmiş kapsamını ve zamanları okuyun."
+  },
+  "Separate transfers from trades": {
+    "tr": "Transferleri işlemlerden ayırın"
+  },
+  "Observed liquidations counts only Bybit messages received during the current session. Reconnection gaps are shown; bankruptcy-price estimates are not execution proceeds. The optional CoinGlass heatmap estimates possible liquidation levels. Whale transfers are not buys or sells. Filter by USD size, direction or exchange, then inspect the linked transaction. Add public Hyperliquid addresses in Data settings; position-size changes start with the first observation and can miss changes between polls.": {
+    "tr": "Gözlenen tasfiyeler yalnızca mevcut oturumda alınan Bybit mesajlarını sayar. Bağlantı boşlukları gösterilir; iflas fiyatıyla tahmin edilen tutar, işlemde gerçekleşen gelir değildir. İsteğe bağlı CoinGlass ısı haritası olası tasfiye seviyelerini tahmin eder. Balina transferleri alım veya satım değildir. USD büyüklüğü, yön veya borsaya göre filtreleyin ve bağlantılı işlemi inceleyin. Veri ayarlarına açık Hyperliquid adreslerini ekleyin; pozisyon miktarı değişimleri ilk gözlemle başlar ve sorgular arasındaki değişimler kaçabilir."
+  },
+  "Read ETF flows and on-chain ratios": {
+    "tr": "ETF akışlarını ve zincir üstü oranları okuyun"
+  },
+  "BTC/ETH ETF flows are daily net subscriptions minus redemptions in USD. Choose a reporting date to see each fund. Incomplete reports, observed revisions and market holidays are labelled; missing days are never filled with zero. MVRV compares market value with realized value. NUPL measures aggregate unrealized profit/loss relative to market value. SOPR compares value at spending with value at creation. These ratios and their daily histories are context, not guaranteed price targets.": {
+    "tr": "BTC/ETH ETF akışları, USD cinsinden günlük net katılım eksi geri alımdır. Her fonu görmek için rapor tarihini seçin. Eksik raporlar, gözlenen düzeltmeler ve piyasa tatilleri etiketlenir; eksik günler sıfırla doldurulmaz. MVRV piyasa değerini gerçekleşmiş değerle karşılaştırır. NUPL, toplam gerçekleşmemiş kâr/zararın piyasa değerine oranıdır. SOPR, harcama anındaki değeri oluşturulma anındaki değerle karşılaştırır. Bu oranlar ve günlük geçmişleri bağlam sağlar; kesin fiyat hedefi değildir."
+  },
+  "Configure research access and metric alerts": {
+    "tr": "Araştırma erişimini ve metrik uyarılarını ayarlayın"
+  },
+  "The gear beside Market intelligence stores personal CoinGlass and Glassnode keys in the existing encrypted vault. ETF flows require CoinGlass API access, large transfers require Startup or higher, and modelled heatmaps require Professional or higher. Glassnode needs API entitlement for each metric and asset. No subscription is purchased by HardEarner. Metric alert lets you choose a threshold and cooldown; duplicates are rejected. A condition alerts on entry and must become false before it can alert again. Stale or incomplete data cannot trigger it. Windows needs the app running in the tray; the web needs a visible, unlocked tab.": {
+    "tr": "Piyasa verileri yanındaki dişli, kişisel CoinGlass ve Glassnode anahtarlarını mevcut şifreli kasada saklar. ETF akışları CoinGlass API erişimi, büyük transferler en az Startup, modellenen ısı haritası en az Professional planı gerektirir. Glassnode’da her metrik ve varlık için API yetkisi gerekir. HardEarner abonelik satın almaz. Metrik uyarısında eşik ve bekleme süresi seçin; aynı uyarının tekrarı reddedilir. Koşula girince bildirim gelir; yeniden bildirim için koşul önce geçersiz olmalıdır. Eski/eksik veriler uyarı üretmez. Windows’ta uygulama tepside çalışmalı; web’de sekme görünür ve kasa açık olmalıdır."
+  },
+  "Funding rates": {
+    "tr": "Fonlama oranları"
+  },
+  "Funding rate": {
+    "tr": "Fonlama oranı"
+  },
+  "Open interest": {
+    "tr": "Açık pozisyon"
+  },
+  "Observed liquidations": {
+    "tr": "Gözlenen tasfiyeler"
+  },
+  "Whale tracking": {
+    "tr": "Balina takibi"
+  },
+  "BTC / ETH ETF flows": {
+    "tr": "BTC / ETH ETF akışları"
+  },
+  "On-chain valuation": {
+    "tr": "Zincir üstü değerleme"
+  },
+  "Current rate": {
+    "tr": "Güncel oran"
+  },
+  "Next settlement": {
+    "tr": "Sonraki uzlaşma"
+  },
+  "Change": {
+    "tr": "Değişim"
+  },
+  "Notional": {
+    "tr": "Nominal tutar"
+  },
+  "single side": {
+    "tr": "tek taraf"
+  },
+  "sum of long and short sides": {
+    "tr": "uzun ve kısa tarafların toplamı"
+  },
+  "Long liquidations": {
+    "tr": "Uzun pozisyon tasfiyeleri"
+  },
+  "Short liquidations": {
+    "tr": "Kısa pozisyon tasfiyeleri"
+  },
+  "Bankruptcy price": {
+    "tr": "İflas fiyatı"
+  },
+  "Estimated notional": {
+    "tr": "Tahmini tutar"
+  },
+  "Direction": {
+    "tr": "Yön"
+  },
+  "Evidence": {
+    "tr": "Kanıt"
+  },
+  "From → to": {
+    "tr": "Gönderici → alıcı"
+  },
+  "Side": {
+    "tr": "Taraf"
+  },
+  "Size": {
+    "tr": "Miktar"
+  },
+  "Entry": {
+    "tr": "Giriş"
+  },
+  "Liquidation": {
+    "tr": "Tasfiye"
+  },
+  "Net daily flow": {
+    "tr": "Günlük net akış"
+  },
+  "Report status": {
+    "tr": "Rapor durumu"
+  },
+  "provider-reported": {
+    "tr": "sağlayıcı tarafından raporlandı"
+  },
+  "incomplete": {
+    "tr": "eksik"
+  },
+  "holiday": {
+    "tr": "piyasa tatili"
+  },
+  "weekend": {
+    "tr": "hafta sonu"
+  },
+  "reporting day": {
+    "tr": "raporlama günü"
+  },
+  "calendar-unverified": {
+    "tr": "takvim doğrulanmadı"
+  },
+  "all": {
+    "tr": "tümü"
+  },
+  "inflow": {
+    "tr": "giriş"
+  },
+  "outflow": {
+    "tr": "çıkış"
+  },
+  "internal": {
+    "tr": "borsa içi"
+  },
+  "transfer": {
+    "tr": "transfer"
+  },
+  "unclassified": {
+    "tr": "sınıflandırılmamış"
+  },
+  "ready": {
+    "tr": "veri alınıyor"
+  },
+  "connecting": {
+    "tr": "bağlanıyor"
+  },
+  "reconnecting": {
+    "tr": "yeniden bağlanıyor"
+  },
+  "unsupported": {
+    "tr": "desteklenmiyor"
+  },
+  "unavailable": {
+    "tr": "kullanılamıyor"
+  },
+  "Coverage unavailable": {
+    "tr": "Kapsam bilgisi yok"
+  },
+  "ETF net flow": {
+    "tr": "ETF net akışı"
+  },
+  "Large transfer": {
+    "tr": "Büyük transfer"
+  },
+  "Exchange transfer": {
+    "tr": "Borsa transferi"
+  },
+  "This metric alert is already active.": {
+    "tr": "Bu metrik uyarısı zaten etkin."
+  },
+  "Provider returned an older observation. It is excluded from alerts.": {
+    "tr": "Sağlayıcı eski bir gözlem döndürdü. Uyarılarda kullanılmaz."
+  },
+  "Provider access required. Check the key, plan and regional availability.": {
+    "tr": "Sağlayıcı erişimi gerekiyor. Anahtarı, planı ve bölgesel erişimi kontrol edin."
+  },
+  "Add a public Hyperliquid address in panel settings.": {
+    "tr": "Panel ayarlarına herkese açık bir Hyperliquid adresi ekleyin."
+  },
+  "Choose BTC or ETH for this integration.": {
+    "tr": "Bu entegrasyon için BTC veya ETH seçin."
+  },
+  "Current rate is indicative until settlement. Positive: longs pay shorts. Negative: shorts pay longs. History contains settled rates.": {
+    "tr": "Güncel oran uzlaşmaya kadar göstergedir. Pozitif oranda uzunlar kısalara, negatif oranda kısalar uzunlara öder. Geçmişte uzlaşan oranlar gösterilir."
+  },
+  "Outstanding contracts expressed in base-asset units. USDT notional also moves when price changes; it is not a USD amount.": {
+    "tr": "Açık sözleşmeler ana varlık birimiyle gösterilir. USDT cinsinden nominal tutar fiyat değişince de değişir; USD tutarı değildir."
+  },
+  "Net subscriptions minus redemptions, not trading volume. Publication can lag. Provider reports may be revised; a balanced sum does not confirm that every fund has reported.": {
+    "tr": "Net katılım eksi geri alımdır; işlem hacmi değildir. Yayın gecikebilir ve raporlar düzeltilebilir. Toplamın eşleşmesi her fonun raporlandığını doğrulamaz."
+  },
+  "Market value divided by realized value. A ratio of 1 means these values are equal; it is not a price target.": {
+    "tr": "Piyasa değerinin gerçekleşmiş değere oranıdır. 1, iki değerin eşit olduğunu gösterir; fiyat hedefi değildir."
+  },
+  "Net unrealized profit or loss divided by market value. Negative readings indicate aggregate unrealized losses. This is a ratio, not a percentage.": {
+    "tr": "Net gerçekleşmemiş kâr/zararın piyasa değerine oranıdır. Negatif değerler toplam gerçekleşmemiş zararı gösterir. Yüzde değil, orandır."
+  },
+  "Value when coins are spent divided by their value when created. Above 1 indicates aggregate realized profit; below 1 indicates loss. It is not your portfolio return.": {
+    "tr": "Coinlerin harcandığı andaki değerinin oluşturulduğundaki değerine oranıdır. 1 üstü toplam gerçekleşmiş kârı, 1 altı zararı gösterir. Kişisel portföy getiriniz değildir."
+  },
+  "Amounts use bankruptcy price, not execution price. Totals include only events received since observation began. Disconnections create gaps; this is not an all-exchange liquidation total.": {
+    "tr": "Tutarlar gerçekleşen işlem fiyatı değil, iflas fiyatıyla hesaplanır. Toplam yalnızca gözlem başlangıcından beri alınan olayları kapsar. Kopmalar boşluk oluşturur; tüm borsaların tasfiye toplamı değildir."
+  },
+  "Some metric feeds are unavailable, stale or incomplete. Those alerts remain active.": {
+    "tr": "Bazı metrik kaynakları kullanılamıyor, eski veya eksik. İlgili uyarılar etkin kalır."
+  },
+  "CoinGlass API access · Hobbyist or above": {
+    "tr": "CoinGlass API erişimi · en az Hobbyist"
+  },
+  "CoinGlass API access · Startup or above": {
+    "tr": "CoinGlass API erişimi · en az Startup"
+  },
+  "CoinGlass API access · Professional or above": {
+    "tr": "CoinGlass API erişimi · en az Professional"
+  },
+  "Glassnode API access for MVRV": {
+    "tr": "MVRV için Glassnode API erişimi"
+  },
+  "Glassnode API access for NUPL": {
+    "tr": "NUPL için Glassnode API erişimi"
+  },
+  "Glassnode API access for SOPR": {
+    "tr": "SOPR için Glassnode API erişimi"
   }
 }
