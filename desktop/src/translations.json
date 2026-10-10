@@ -6264,5 +6264,11 @@
   },
   "In Self Analysis choose the exchange, coin and candle interval. Use the period buttons for a week through a year. Binance and OKX charts use USDT and update as trades arrive. Metal spot sessions check quotes every 30 seconds; daily history is a separate reference. Follow live returns to the latest candle.": {
     "tr": "Kendi Analizin bölümünde borsa, coin ve mum aralığını seçin. Bir haftadan bir yıla kadar dönem düğmelerini kullanabilirsiniz. Binance ve OKX grafikleri USDT cinsindedir ve yeni işlemler geldikçe güncellenir. Metallerin canlı spot oturumu 30 saniyede bir fiyat kontrol eder; günlük geçmiş ayrı bir referanstır. Canlıyı takip et son muma döner."
+  },
+  "Web and Windows passwords": {
+    "tr": "Web ve Windows şifreleri"
+  },
+  "The private website now offers Forgot your password with an email code. It starts an empty web vault and keeps an encrypted archive requiring the old password. The installed Windows app has a separate local password and Windows-encrypted data; web reset does not change it. Never delete your portfolio or connection files to remove a password.": {
+    "tr": "Özel sitede e-posta koduyla Şifremi unuttum seçeneği bulunur. Boş web kasası açılır, eski şifreyi gerektiren şifreli arşiv korunur. Kurulu Windows uygulamasının yerel şifresi ve Windows ile şifreli verileri ayrıdır; web sıfırlaması bunları değiştirmez. Şifreyi kaldırmak için portföy veya bağlantı dosyalarını silme."
   }
 }

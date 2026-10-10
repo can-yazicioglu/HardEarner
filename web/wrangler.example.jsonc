@@ -6,6 +6,9 @@
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
   "preview_urls": false,
+  // Optional email resets: onboard the sender domain, verify recipients and set
+  // RECOVERY_SECRET with `wrangler secret put`. Never add secrets here.
+  // "send_email": [{ "name": "RECOVERY_EMAIL" }],
   "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": true },
   "durable_objects": { "bindings": [{ "name": "VAULTS", "class_name": "UserVault" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["UserVault"] }],
@@ -13,6 +16,7 @@
     "ACCESS_ISSUER": "https://your-team.cloudflareaccess.com",
     "ACCESS_AUD": "",
     "ALLOWED_EMAILS": "owner@example.com"
+    // ,"RECOVERY_FROM": "security@your-owned-domain.example"
   },
   "observability": { "enabled": false }
 }

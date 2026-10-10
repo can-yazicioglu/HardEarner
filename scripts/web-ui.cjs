@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const cwd = path.join(root, 'web');
-const suites = ['browser.cjs', 'investments-browser.cjs', 'parity-browser.cjs', 'research-browser.cjs', 'insights-browser.cjs', 'lab-browser.cjs'];
+const suites = ['browser.cjs', 'investments-browser.cjs', 'parity-browser.cjs', 'research-browser.cjs', 'insights-browser.cjs', 'lab-browser.cjs', 'recovery-browser.cjs'];
 const selected = process.argv.slice(2);
 if (selected.some(name => !suites.includes(name))) throw Error('Unknown web UI suite.');
 fs.mkdirSync(path.join(root, '.artifacts', 'screenshots'), {recursive: true});

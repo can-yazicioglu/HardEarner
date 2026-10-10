@@ -3,8 +3,8 @@
 <p align="center">
   <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://img.shields.io/badge/CI-GitHub_Actions-b92d50?logo=githubactions&amp;logoColor=white" /></a>
   <img alt="Status: Private preview" src="https://img.shields.io/badge/status-private_preview-612137" />
-  <img alt="Windows desktop 2.16.0" src="https://img.shields.io/badge/desktop-2.16.0-b92d50" />
-  <img alt="Private web 2.16.0" src="https://img.shields.io/badge/web-2.16.0-b92d50" />
+  <img alt="Windows desktop 2.16.1" src="https://img.shields.io/badge/desktop-2.16.1-b92d50" />
+  <img alt="Private web 2.16.1" src="https://img.shields.io/badge/web-2.16.1-b92d50" />
   <img alt="License: Proprietary" src="https://img.shields.io/badge/license-proprietary-51617a" />
 </p>
 
@@ -146,12 +146,14 @@ node desktop/node_modules/playwright/cli.js install chromium webkit
 npm run test:web-ui
 ```
 
-- **252 unit/integration tests** across the shared desktop core and web services.
-- **Twelve web UI runs** across Chromium and WebKit, including vault sync, conflicting saves, recovery, investments, drawings and streamed chart updates.
+- **259 unit/integration tests** across the shared desktop core and web services.
+- **Fourteen web UI runs** across Chromium and WebKit, including vault sync, conflicting saves, recovery, investments, drawings and streamed chart updates.
 - Responsive checks cover **11 portfolio routes and seven Research sections at four widths**, from phone to desktop.
 - Optional Windows Electron tests cover isolated profiles, restart persistence and the desktop interface: `npm run test:desktop-ui`.
 
 CI builds both targets on Windows and Linux, then runs the web UI checks on Linux. Provider responses are fixtures; passing these tests is not a claim that every live financial account or API is available in every region.
+
+Email-code resets archive the old encrypted vault and create a new empty one; they cannot decrypt forgotten passwords. See [password reset and setup](docs/password-reset.md).
 
 ## Private preview
 

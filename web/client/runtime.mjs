@@ -18,6 +18,7 @@ let securities,researchWorkspace;
 import researchWorkspaceCore from '../../desktop/electron/research-workspace.cjs';
 let lastSaved=null,sessionError=null,refreshing=null,pendingSave=null,noticeBuffer=null;
 let generation=0,restoreCandidate=null,preferredLanguage='tr';
+let resetWrite=null;
 const requests=new Set();
 const authListeners=new Set(),streamListeners=new Map(),movementListeners=new Set(),cloudListeners=new Set();
 const streams=streamCore.createChartStreams({emit:(id,value)=>streamListeners.get(id)?.(value),metalSample:asset=>marketCall('metalSession',asset)});
@@ -102,6 +103,39 @@ async function recoverPending(mode,password){
 }
 function clearSession(){generation++;for(const r of requests)r.abort();requests.clear();streams.stopAll();researchWorkspace?.stop();researchWorkspace=null;streamListeners.clear();key=null;data=null;analysis=null;securities=null;restoreCandidate=null;market={};busy=false;noticeBuffer=null;snapshotStore.setSnapshot({});}
 async function lock(){researchSessionBridge.lock();clearSession();authChanged();}
+async function startPasswordReset(){
+  await bootstrap;await queue;if(key)throw Error('Lock the vault before resetting it.');
+  const head=await request('/api/vault');
+  const result=await request('/api/recovery/start',{revision:head.revision});
+  return {...result,revision:head.revision};
+}
+async function completePasswordReset(challenge,code,password,confirmation){
+  await bootstrap;await queue;if(key)throw Error('Lock the vault before resetting it.');
+  if(password!==confirmation)throw Error('Passwords do not match.');
+  const epoch=generation,resetSalt=newSalt(),resetKey=await deriveKey(password,resetSalt);
+  const portfolio=clone(domain.DEFAULT);portfolio.settings.language='tr';portfolio.settings.currency='TRY';
+  const envelope=await seal({version:1,portfolio,connections:{connections:[]}},resetKey,resetSalt,identity.id);
+  if(epoch!==generation||key)throw Error('The vault session changed. Start again.');
+  // Keep one stable id and ciphertext for retry after a lost response, in memory only.
+  let write={challengeId:challenge.challengeId,revision:challenge.revision,code,envelope,requestId:crypto.randomUUID(),confirmation:'start-empty-vault'};
+  if(resetWrite?.challengeId===challenge.challengeId&&resetWrite.code===code){try{await open(resetWrite.envelope,await deriveKey(password,resetWrite.envelope.salt),identity.id);write=resetWrite}catch{}}
+  resetWrite=write;
+  // No credentials or reset codes are written to IndexedDB.
+  const before=await request('/api/vault'),pending=(await cache.read('pending')).value;
+  await cache.write([['before-email-reset-'+Date.now(),before],...(pending?[['pending-before-reset-'+Date.now(),pending]]:[])]);
+  if(epoch!==generation||key)throw Error('The vault session changed. Start again.');
+  try{await request('/api/recovery/complete',write);}
+  catch(error){
+    // A committed reset with a lost response is success only for this exact ciphertext.
+    const head=await request('/api/vault').catch(()=>null);
+    if(!head||JSON.stringify(head.envelope)!==JSON.stringify(write.envelope))throw error;
+  }
+  researchSessionBridge.lock();clearSession();remote=await request('/api/vault');
+  await cache.write([['saved',remote],['pending',null,null,false]]);pendingSave=null;pendingRemote=false;sessionError=null;
+  resetWrite=null;authChanged();notifyCloud();return status();
+}
+async function resetArchives(){await bootstrap;return request('/api/recovery/archives');}
+async function downloadResetArchive(id){await bootstrap;const saved=await request('/api/recovery/archive',{id});return download('HardEarner-before-reset-'+saved.savedAt.slice(0,10)+'.json',JSON.stringify({format:BACKUP_FORMAT,identity:identity.id,createdAt:saved.savedAt,version:WEB_VERSION,envelope:saved.envelope}));}
 async function changePassword(current,password,confirmation){
   const epoch=generation;await queue;checkSession(epoch);if(busy||pendingSave)throw Error('Finish the pending save before changing the password.');if(password!==confirmation)throw Error('Passwords do not match.');
   const job=(async()=>{busy=true;notifyCloud();try{
@@ -156,6 +190,7 @@ window.hardearner=Object.freeze({
   onSettingsChanged:f=>{const handler=e=>f(e.detail);window.addEventListener('hardearner-settings',handler);return()=>window.removeEventListener('hardearner-settings',handler)},
   onAuthState:f=>{authListeners.add(f);return()=>authListeners.delete(f)},
   authChange:changePassword,exportVault,inspectVaultBackup,restoreVaultBackup,previousVault,cloudStatus:async()=>cloudStatus(),
+  resetStatus:async()=>{await bootstrap;return request('/api/recovery')},startPasswordReset,completePasswordReset,resetArchives,downloadResetArchive,
   loadCloudChanges:pull,onCloudUpdate:f=>{cloudListeners.add(f);return()=>cloudListeners.delete(f)},
   recoverPending,
   // The shared theme component handles DOM appearance; only Electron has native window chrome.

@@ -1,6 +1,6 @@
 # Architecture
 
-HardEarner is one product with a shared React interface and accounting core, adapted to two runtimes. Desktop and private web source version: **2.16.0**.
+HardEarner is one product with a shared React interface and accounting core, adapted to two runtimes. Desktop and private web source version: **2.16.1**.
 
 ```mermaid
 flowchart TB

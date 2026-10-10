@@ -2,10 +2,21 @@ import {DurableObject} from 'cloudflare:workers';
 import {createVaultRepository} from './vault-repository.mjs';
 import {accountAction} from './account-actions.mjs';
 import {createProviderBackoff,providerFor} from './provider-backoff.mjs';
+import {createVaultRecovery} from './vault-recovery.mjs';
+import {sendResetNotice} from './recovery-mail.mjs';
 export class UserVault extends DurableObject {
-  constructor(ctx,env){super(ctx,env);this.repository=createVaultRepository(ctx.storage);this.backoff=createProviderBackoff(ctx.storage);this.accountBusy=false;this.pauseUntil=Date.parse(env.KRAKEN_PAUSE_UNTIL||'')||0;}
+  constructor(ctx,env){super(ctx,env);this.repository=createVaultRepository(ctx.storage);this.recovery=createVaultRecovery({storage:ctx.storage,repository:this.repository,env});this.backoff=createProviderBackoff(ctx.storage);this.accountBusy=false;this.pauseUntil=Date.parse(env.KRAKEN_PAUSE_UNTIL||'')||0;}
   read(){return this.repository.read();}
   write(input){return this.repository.write(input);}
+  recoveryStatus(){return this.recovery.status();}
+  recoveryStart(input,identity){return this.recovery.start(input,identity);}
+  async recoveryComplete(input,identity){
+    const result=this.recovery.complete(input,identity);
+    if(result.ok&&!result.duplicate){try{await sendResetNotice(this.env,identity.email)}catch{result.notificationPending=true}}
+    return result;
+  }
+  archives(){return this.repository.archives();}
+  archive(id){return this.repository.archive(id);}
   async account(input){
     if(this.accountBusy)return {error:'An account is already syncing on another device. Try again shortly.',status:409};
     if(input.revision!==this.repository.read().revision)return {error:'Your portfolio changed on another device. Reload it before syncing.',status:409};

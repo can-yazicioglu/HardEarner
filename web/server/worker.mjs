@@ -13,9 +13,11 @@ export {UserVault} from './user-vault.mjs';
 export async function handle(request,env,identity){
   const url=new URL(request.url);
   if(url.pathname.startsWith('/api/')&&url.search)throw new HttpError(400,'Parameters belong in the request body.');
-  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.16.0-web',closedBrowserAlerts:false});
+  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.16.1-web',closedBrowserAlerts:false});
   const vault=env.VAULTS.getByName(identity.id);
   if(url.pathname==='/api/vault'&&request.method==='GET')return json(vault?await vault.read():null);
+  if(url.pathname==='/api/recovery'&&request.method==='GET')return json(await vault.recoveryStatus());
+  if(url.pathname==='/api/recovery/archives'&&request.method==='GET')return json(await vault.archives());
   if(!url.pathname.startsWith('/api/')){
     if(request.method!=='GET'&&request.method!=='HEAD')throw new HttpError(405,'Method not allowed.');
     const response=await env.ASSETS.fetch(request),headers=assetHeaders(new Headers(response.headers),url.pathname);
@@ -26,6 +28,11 @@ export async function handle(request,env,identity){
   if(!['POST','PUT'].includes(request.method))throw new HttpError(405,'Method not allowed.');
   requireSameOrigin(request);
   const input=await boundedJson(request,['/api/securities-data','/api/research'].includes(url.pathname)?16384:url.pathname==='/api/market'?100000:MAX_CIPHERTEXT+8192);
+  if(request.method==='POST'&&['/api/recovery/start','/api/recovery/complete','/api/recovery/archive'].includes(url.pathname)){
+    if(url.pathname==='/api/recovery/archive')return json(await vault.archive(input.id));
+    const result=await(url.pathname.endsWith('/start')?vault.recoveryStart(input,identity):vault.recoveryComplete(input,identity));
+    return json(result,result.status||200);
+  }
   if(url.pathname==='/api/vault'&&request.method==='PUT'){
     const result=await vault.write(input);return json(result,result.conflict?409:200);
   }

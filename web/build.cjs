@@ -54,7 +54,7 @@ async function main(){
  fs.writeFileSync('dist/manifest.webmanifest',JSON.stringify({name:'HardEarner Private',short_name:'HardEarner',start_url:'/',display:'standalone',theme_color:'#09090b',background_color:'#09090b',icons:[{src:'/icon-192.png',sizes:'192x192',type:'image/png'},{src:'/icon-512.png',sizes:'512x512',type:'image/png'}]}));
  fs.writeFileSync('dist/_headers',"/*\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' wss://data-stream.binance.vision wss://ws.okx.com:8443 wss://stream.bybit.com; frame-src https://www.tradingview-widget.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  X-Robots-Tag: noindex, nofollow\n");
  fs.copyFileSync('client/privacy.html','dist/privacy.html');
- console.log('Built HardEarner web 2.16.0 from the shared desktop 2.16 UI and accounting core.');
+ console.log('Built HardEarner web 2.16.1 from the shared desktop 2.16 UI and accounting core.');
 }
 module.exports={adapters,main};
 if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1});

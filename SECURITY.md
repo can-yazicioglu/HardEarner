@@ -19,6 +19,12 @@ Opening Research from an unlocked browser uses an exact-origin, exact-window, on
 
 Research provider credentials use the same encrypted storage and HTTPS relay boundaries as existing data providers. They are not embedded in widgets, logs or client bundles. Private notebook inputs are not automatically transmitted to an LLM.
 
+## Email reset
+
+Forgotten web passwords can start a new empty vault after a separate email code and explicit confirmation. This never decrypts existing records or escrows a decryption key. The old ciphertext is archived atomically and is downloadable only by the same invited identity; opening it still needs its original password. These reset archives are retained separately from ordinary revision history. Account deletion procedures must include them.
+
+Codes are recipient-bound, HMAC-protected at rest, limited to five attempts and ten minutes, and rate-limited across Worker restarts. A newer vault revision invalidates an outstanding reset. Secrets stay in Worker bindings. Email-provider failures do not reset the vault. The local Windows password is separate and is never bypassed by this web flow. See [deployment and protocol](docs/password-reset.md).
+
 ## Repository hygiene
 
 This source distribution excludes live account records, API credentials, local profiles, encrypted backups, Cloudflare invitation configuration and Store package identity. `.gitignore` reduces accidental inclusion but is not a substitute for reviewing staged changes.
