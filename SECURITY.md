@@ -13,6 +13,12 @@ Report a suspected vulnerability privately to **can.yazicioglu.p@gmail.com**. De
 - Disconnecting removes credentials from the current vault; previous encrypted backups may still contain them. Revoke a key at its provider when appropriate.
 - Manual portfolio JSON and CSV exports are unencrypted. Full web vault backups are encrypted and retain the password used when exported.
 
+## Research sessions
+
+Opening Research from an unlocked browser uses an exact-origin, exact-window, one-use handshake with a 15-second expiry. The child verifies account identity and vault salt before using a non-extractable CryptoKey transferred through MessageChannel. Passwords and raw key bytes are never persisted for this handoff. Explicit lock and successful password rotation send an account-scoped lock signal to other tabs. Reloading or directly opening a tab still requires unlock.
+
+Research provider credentials use the same encrypted storage and HTTPS relay boundaries as existing data providers. They are not embedded in widgets, logs or client bundles. Private notebook inputs are not automatically transmitted to an LLM.
+
 ## Repository hygiene
 
 This source distribution excludes live account records, API credentials, local profiles, encrypted backups, Cloudflare invitation configuration and Store package identity. `.gitignore` reduces accidental inclusion but is not a substitute for reviewing staged changes.

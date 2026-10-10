@@ -13,7 +13,7 @@ export {UserVault} from './user-vault.mjs';
 export async function handle(request,env,identity){
   const url=new URL(request.url);
   if(url.pathname.startsWith('/api/')&&url.search)throw new HttpError(400,'Parameters belong in the request body.');
-  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.15.0-web',closedBrowserAlerts:false});
+  if(url.pathname==='/api/session'&&request.method==='GET')return json({...identity,version:'2.16.0-web',closedBrowserAlerts:false});
   const vault=env.VAULTS.getByName(identity.id);
   if(url.pathname==='/api/vault'&&request.method==='GET')return json(vault?await vault.read():null);
   if(!url.pathname.startsWith('/api/')){

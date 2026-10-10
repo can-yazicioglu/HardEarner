@@ -2,7 +2,7 @@ import {validateEnvelope} from '../shared/envelope.mjs';
 import {deriveKey,open,seal} from './crypto.mjs';
 import {holdingSource} from '../../desktop/electron/holding-source.cjs';
 
-export const WEB_VERSION='2.15.0';
+export const WEB_VERSION='2.16.0';
 export const BACKUP_FORMAT='hardearner-vault-backup-v1';
 export async function encryptedBackup(data,key,salt,identity){
   return {format:BACKUP_FORMAT,identity,createdAt:new Date().toISOString(),version:WEB_VERSION,envelope:await seal(data,key,salt,identity)};

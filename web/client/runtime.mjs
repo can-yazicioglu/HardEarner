@@ -1,3 +1,4 @@
+import {researchSession} from './research-session.mjs';
 import {mergeMarket,failedMarket,performanceMarket} from './market-state.mjs';
 import performanceCore from '../../desktop/electron/performance.cjs';
 import securitiesCore from '../../desktop/electron/securities.cjs';
@@ -35,6 +36,14 @@ async function request(path,body,method=body===undefined?'GET':'POST'){
 }
 const bootstrap=(async()=>{identity=await request('/api/session');cache=createStore('hardearner-private-'+identity.id);remote=await request('/api/vault');return status();})();
 bootstrap.catch(e=>{sessionError=e.message;authChanged();notifyCloud();});
+const researchSessionBridge=researchSession({
+ getSession:async()=>{await queue;requireUnlocked();if(pendingSave||busy)return null;return{key,identity:identity.id,salt};},
+ acceptSession:async(session)=>{await bootstrap;if(session.identity!==identity.id||!(session.key instanceof CryptoKey)||session.key.extractable||session.key.algorithm.name!=='AES-GCM')throw Error('Invalid session.');const epoch=generation,next=await request('/api/vault');if(!next.envelope||next.envelope.salt!==session.salt)throw Error('Session changed.');const decoded=await open(next.envelope,session.key,identity.id);if(generation!==epoch)throw Error('Session locked.');install(decoded);key=session.key;salt=session.salt;remote=next;pendingSave=(await cache.read('pending')).value||null;checkSession(epoch);sessionError=null;authChanged();notifyCloud();},
+ onLock:()=>{clearSession();authChanged();}
+});
+const sessionReady=bootstrap.then(async()=>{researchSessionBridge.bind(identity.id);await researchSessionBridge.accept();return status();});
+sessionReady.catch(()=>{});
+
 function requireUnlocked(){if(!key||!data)throw Error('Unlock your private vault first.');}
 function checkSession(expected){requireUnlocked();if(expected!==generation)throw Error('The vault was locked. Unlock it before continuing.');}
 function install(next){
@@ -92,7 +101,7 @@ async function recoverPending(mode,password){
   }catch(e){if(epoch===generation)sessionError=e.message;throw e;}finally{if(epoch===generation){busy=false;notifyCloud();}}
 }
 function clearSession(){generation++;for(const r of requests)r.abort();requests.clear();streams.stopAll();researchWorkspace?.stop();researchWorkspace=null;streamListeners.clear();key=null;data=null;analysis=null;securities=null;restoreCandidate=null;market={};busy=false;noticeBuffer=null;snapshotStore.setSnapshot({});}
-async function lock(){clearSession();authChanged();}
+async function lock(){researchSessionBridge.lock();clearSession();authChanged();}
 async function changePassword(current,password,confirmation){
   const epoch=generation;await queue;checkSession(epoch);if(busy||pendingSave)throw Error('Finish the pending save before changing the password.');if(password!==confirmation)throw Error('Passwords do not match.');
   const job=(async()=>{busy=true;notifyCloud();try{
@@ -104,7 +113,7 @@ async function changePassword(current,password,confirmation){
     const result=await request('/api/vault',write,'PUT');checkSession(epoch);
     if(result.currentRevision&&result.currentRevision!==result.revision)throw Error('Newer cloud changes exist. Review the encrypted pending copy.');
     key=nextKey;salt=nextSalt;remote={revision:result.revision,envelope};lastSaved=result.savedAt;
-    await cache.write([['saved',remote],['pending',null,null,false]]);checkSession(epoch);pendingSave=null;sessionError=null;return true;
+    await cache.write([['saved',remote],['pending',null,null,false]]);checkSession(epoch);pendingSave=null;sessionError=null;researchSessionBridge.lock();return true;
   }catch(e){if(epoch===generation)sessionError=e.message;throw e;}finally{if(epoch===generation){busy=false;notifyCloud();}}})();queue=job.catch(()=>{});return job;
 }
 async function exportVault(){const epoch=generation;await queue;checkSession(epoch);if(pendingSave)throw Error('Resolve the pending save or download its encrypted recovery copy first.');const backup=await encryptedBackup(capture(),key,salt,identity.id);checkSession(epoch);return download('HardEarner-vault-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(backup));}
@@ -142,14 +151,16 @@ window.hardearner=Object.freeze({
   researchSettings:(action,value)=>mutate(()=>researchWorkspace.mutate(action,value)),
   researchQuery:(kind,input)=>kind==='liquidations'?(requireUnlocked(),researchWorkspace.query(kind,input)):mutate(()=>researchWorkspace.query(kind,input)),
   research:()=>marketCall('research'),researchLink:async key=>window.open(researchLink(key),'_blank','noopener,noreferrer'),
-  openResearch:async()=>{window.open(location.origin+'/#research','_blank','noopener,noreferrer');return true},closeResearch:async()=>{location.hash='';location.reload();return true},
-  platform:'private-web',performance:async c=>performanceView(c),securities:async()=>{requireUnlocked();return securities.view()},securitiesKey:k=>mutate(()=>securities.setKey(k)),securitiesAdd:i=>mutate(()=>securities.add(i)),securitiesFacts:(id,v)=>mutate(()=>securities.facts(id,v)),securitiesSearch:async q=>{requireUnlocked();return securities.search(q)},securitiesQuote:id=>mutate(async()=>{const d=await securities.quote(id);market.securities=d.quotes;return d}),securitiesHistory:async(id,days)=>{requireUnlocked();return securities.history(id,days)},authStatus:()=>bootstrap.then(status),authSetup:unlock,authUnlock:unlock,authLock:lock,
+  openResearch:async()=>{requireUnlocked();return researchSessionBridge.open()},closeResearch:async()=>{location.hash='';return false},
+  platform:'private-web',performance:async c=>performanceView(c),securities:async()=>{requireUnlocked();return securities.view()},securitiesKey:k=>mutate(()=>securities.setKey(k)),securitiesAdd:i=>mutate(()=>securities.add(i)),securitiesFacts:(id,v)=>mutate(()=>securities.facts(id,v)),securitiesSearch:async q=>{requireUnlocked();return securities.search(q)},securitiesQuote:id=>mutate(async()=>{const d=await securities.quote(id);market.securities=d.quotes;return d}),securitiesHistory:async(id,days)=>{requireUnlocked();return securities.history(id,days)},authStatus:()=>sessionReady.then(status),authSetup:unlock,authUnlock:unlock,authLock:lock,
   onSettingsChanged:f=>{const handler=e=>f(e.detail);window.addEventListener('hardearner-settings',handler);return()=>window.removeEventListener('hardearner-settings',handler)},
   onAuthState:f=>{authListeners.add(f);return()=>authListeners.delete(f)},
   authChange:changePassword,exportVault,inspectVaultBackup,restoreVaultBackup,previousVault,cloudStatus:async()=>cloudStatus(),
   loadCloudChanges:pull,onCloudUpdate:f=>{cloudListeners.add(f);return()=>cloudListeners.delete(f)},
   recoverPending,
-  load:async()=>{requireUnlocked();return{state:clone(data.portfolio),market:clone(market),encrypted:true,vaultError:null,version:WEB_VERSION+' Web',dataPath:null,launchPage:location.hash==='#research'?'Self Analysis':null}},
+  // The shared theme component handles DOM appearance; only Electron has native window chrome.
+  setTheme:async value=>{if(!['dark','light'].includes(value))throw Error('Choose a supported theme.');return value},
+  load:async()=>{requireUnlocked();return{state:clone(data.portfolio),market:clone(market),encrypted:true,vaultError:null,version:WEB_VERSION+' Web',dataPath:null,launchPage:location.hash.startsWith('#research')?'Self Analysis':null}},
   save:next=>mutate(()=>{data.portfolio=domain.validateState(next);return clone(data.portfolio)}),
   saveSetting:(name,value)=>mutate(()=>{if(!Object.hasOwn(domain.DEFAULT.settings,name))throw Error('Unsupported setting.');data.portfolio=domain.validateState({...data.portfolio,settings:{...data.portfolio.settings,[name]:value}});return clone(data.portfolio)}),
   refresh:()=>refreshing||(refreshing=(async()=>{requireUnlocked();const epoch=generation;try{const next=await marketCall('refresh',allHoldings().filter(h=>h.type==='crypto').map(h=>h.asset));checkSession(epoch);market={...mergeMarket(market,next),securities:securities.view().quotes};const {securities:privateQuotes,...publicMarket}=market;await cache.write([['public-market',publicMarket,null,false]]);checkSession(epoch);try{await refreshInvestments()}catch{};checkSession(epoch);if(allHoldings().length&&Date.now()-Math.max(0,...Object.values(data.performance?.closes||{}).map(c=>c.time))>300000)try{await mutate(()=>true)}catch{};}catch(e){if(epoch!==generation)throw Error('The vault was locked.');market=failedMarket(market,e.message);}checkSession(epoch);return clone(market);})().finally(()=>refreshing=null)),

@@ -1,6 +1,6 @@
 # Architecture
 
-HardEarner is one product with a shared React interface and accounting core, adapted to two runtimes. Desktop source version: **2.13.0**. Private web source version: **2.13.1**.
+HardEarner is one product with a shared React interface and accounting core, adapted to two runtimes. Desktop and private web source version: **2.16.0**.
 
 ```mermaid
 flowchart TB
@@ -64,3 +64,9 @@ Quote freshness and venue matter. Crypto charts can use live public trade stream
 ## Verification boundaries
 
 The local server under `web/tests/` substitutes a synthetic identity and an in-memory platform. It is only a test fixture, is bound to loopback and is never part of the deployed Worker entry point. UI suites inject synthetic provider responses. Real credentials, local profiles and deployment identities are intentionally excluded from Git.
+
+## Research Lab
+
+The shared research catalogue, data adapters, calculations, layout validation and UI live under desktop/electron/research-* and desktop/src/research-*. Both runtimes use these modules. Public requests are bounded and coalesced; personal-provider requests use encrypted credentials and the existing authenticated relay. The library distinguishes available data from configured-but-unverified and unimplemented source coverage.
+
+The browser Research handoff validates exact origin/window/token, identity and vault salt, then transfers a non-extractable CryptoKey through MessageChannel in memory. Explicit lock and password rotation broadcast only an account-scoped lock signal. No password or key is persisted for this convenience. See [Research Lab](research-lab.md) for the complete boundary and remaining work.

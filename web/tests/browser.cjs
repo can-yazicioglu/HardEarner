@@ -18,7 +18,7 @@ async function run(engine,name){const browser=await engine.launch({headless:true
  const workspace=await p.evaluate(()=>hardearner.analysisLoad());const config={...workspace.panels[0],asset:'BTC',venue:'binance',type:'crypto',interval:'1h',style:'candles',quote:'USDT'};
  await p.evaluate(c=>hardearner.analysisMutate('drawing',{config:c,kind:'freehand',points:[{time:1700000000,price:80000},{time:1700000100,price:81000}]}),config);
  await q.evaluate(()=>hardearner.loadCloudChanges());assert(Object.values((await q.evaluate(()=>hardearner.analysisLoad())).drawings).some(rows=>rows.some(d=>d.kind==='freehand')));
- const child=a.waitForEvent('page');await p.getByRole('button',{name:'Self Analysis',exact:true}).click();const research=await child;await research.waitForLoadState();await unlock(research);await research.getByRole('button',{name:'Charts',exact:true}).click();await research.locator('canvas').first().waitFor();
+ const child=a.waitForEvent('page');await p.getByRole('button',{name:'Self Analysis',exact:true}).click();const research=await child;await research.waitForLoadState();await research.locator('.research-shell').waitFor();assert.equal(await research.locator('.app-lock-card').count(),0);await research.getByRole('button',{name:'Charts',exact:true}).click();await research.locator('canvas').first().waitFor();
  await research.screenshot({path:'../.artifacts/screenshots/HardEarner-private-'+name+'-analysis.png',fullPage:true});
  await research.close();
  const rev=(await q.request.get(URL+'/api/vault')).json();assert((await rev).envelope.ciphertext);assert(!(JSON.stringify(await rev)).includes('Saved from '+name));

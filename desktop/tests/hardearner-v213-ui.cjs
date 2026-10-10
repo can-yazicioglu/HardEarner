@@ -76,7 +76,7 @@ async function stop(){await app.close()}
 
   await card.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'HardEarner-2.13-connections.png')});await card.getByRole('button',{name:'Manage',exact:true}).click();await page.getByRole('heading',{name:'Manage connection · Kraken',exact:true}).waitFor();await page.getByRole('button',{name:'Close dialog',exact:true}).click();
 
-  await page.getByRole('button',{name:'Learn FAST',exact:true}).click();await page.locator('.fast-step').last().waitFor();assert.equal(await page.locator('.fast-step').count(),31);await page.screenshot({path:path.join(out,'HardEarner-2.13-learn.png')});
+  await page.getByRole('button',{name:'Learn FAST',exact:true}).click();await page.locator('.fast-step').last().waitFor();assert.equal(await page.locator('.fast-step').count(),35);await page.screenshot({path:path.join(out,'HardEarner-2.13-learn.png')});
 
   await page.getByRole('button',{name:'Holdings',exact:true}).click();await page.getByText('Includes purchase fees',{exact:true}).waitFor();assert((await page.locator('.holdings-panel').innerText()).includes('1,000,000.00'));await page.getByRole('button',{name:'Purchase log BTC (Kraken)',exact:true}).click();await page.locator('.purchase-log-table').waitFor();assert.equal(await page.locator('.purchase-log-table tbody tr').count(),2);await page.screenshot({path:path.join(out,'HardEarner-2.13-purchases.png')});
 
@@ -126,7 +126,7 @@ async function stop(){await app.close()}
 
  }
 
- assert.deepEqual(errors,[]);console.log('PASS: tradespot costs and UI purchase log, equal-size Manage controls, 31 Learn FAST lessons, 20 USD alerts via UI and persistence, setup/unlock/IPC lock, freehand + horizontal rendering and zoom, live updates, 1s candles, metal session, encrypted Kraken connection and drawings retained over two restarts.');console.log('Isolated profile: '+profile);
+ assert.deepEqual(errors,[]);console.log('PASS: tradespot costs and UI purchase log, equal-size Manage controls, 35 Learn FAST lessons, 20 USD alerts via UI and persistence, setup/unlock/IPC lock, freehand + horizontal rendering and zoom, live updates, 1s candles, metal session, encrypted Kraken connection and drawings retained over two restarts.');console.log('Isolated profile: '+profile);
 
 })().catch(async e=>{console.error(e);if(page)console.error((await page.locator('body').innerText().catch(()=>'' )).slice(0,5000));if(app)await app.close().catch(()=>{});process.exitCode=1});
 

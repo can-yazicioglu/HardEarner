@@ -1,6 +1,6 @@
 # HardEarner Research
 
-Self Analysis opens a dedicated Research window on Windows and a separate tab on the private website. It has six sections: Overview, Charts, Screener, News, Ideas & notes, and Price alerts. Returning to the portfolio does not replace its data. A new web tab needs its own vault unlock; encryption keys are not copied between tabs.
+Self Analysis opens a dedicated Research window on Windows and a separate tab on the private website. It has seven sections: Research Lab, Overview, Charts, Screener, News, Ideas & notes, and Price alerts. Returning to the portfolio does not replace its data. Opening Research from an unlocked parent uses a bounded same-origin in-memory handoff, so no second password is needed. Refreshing or directly opening the page still requires an unlock. See the [Research Lab guide](research-lab.md) for session boundaries and the full feature coverage ledger.
 
 ## Optional market intelligence (2.15)
 

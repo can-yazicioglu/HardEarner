@@ -73,7 +73,7 @@ function createInsights({fetcher=(...a)=>fetch(...a),now=()=>Date.now()}={}){
  const cache=new Map(),pending=new Map();const blocks=new Map();
  async function get(url,options={}){
   const host=new URL(url).hostname;if((blocks.get(host)||0)>now())throw Error('Provider rate limit reached. Requests are paused before retrying.');
-  let r;try{r=await fetcher(url,{...options,redirect:'error',signal:AbortSignal.timeout(15000),headers:{Accept:'application/json','User-Agent':'HardEarner/2.15 (+https://desktop.hardearner.com/privacy)',...options.headers}})}catch{throw Error('Provider could not be reached. Saved data was kept.');}
+  let r;try{r=await fetcher(url,{...options,redirect:'error',signal:AbortSignal.timeout(15000),headers:{Accept:'application/json','User-Agent':'HardEarner/2.16 (+https://desktop.hardearner.com/privacy)',...options.headers}})}catch{throw Error('Provider could not be reached. Saved data was kept.');}
   if(r.status===429){const h=r.headers.get('retry-after'),seconds=Number(h),until=Number.isFinite(seconds)&&seconds>0?now()+seconds*1000:Date.parse(h);blocks.set(host,Math.max(blocks.get(host)||0,Number.isFinite(until)?Math.min(now()+3600000,until):now()+60000));throw Error('Provider rate limit reached. Requests are paused before retrying.');}
   if(!r.ok)throw Error([401,402,403].includes(r.status)?'Provider access required. Check the key, plan and regional availability.':'Provider unavailable. Saved data was kept.');
   try{return await r.json()}catch{throw Error('Provider returned unreadable data.');}

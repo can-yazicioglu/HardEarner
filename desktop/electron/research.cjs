@@ -48,7 +48,7 @@ const FALLBACKS={
  global:[['https://api.coinlore.net/api/global/',loreGlobal,'CoinLore'],['https://api.coinpaprika.com/v1/global',paprikaGlobal,'Powered by CoinPaprika']],
  coins:[['https://api.coinlore.net/api/tickers/',loreCoins,'CoinLore'],['https://api.coinpaprika.com/v1/tickers?quotes=USD',paprikaCoins,'Powered by CoinPaprika']]
 };
-const PUBLIC_HEADERS={'User-Agent':'HardEarner/2.15 (+https://desktop.hardearner.com/privacy)',Accept:'application/json'};
+const PUBLIC_HEADERS={'User-Agent':'HardEarner/2.16 (+https://desktop.hardearner.com/privacy)',Accept:'application/json'};
 function createResearch({requester=request,now=Date.now}={}){
  const saved=new Map(),inflight=new Map();
  async function section(key){const [url,parse,source]=SOURCES[key],old=saved.get(key);if(old&&now()-old.checkedAt<300000)return structuredClone(old);if(inflight.has(key))return inflight.get(key);

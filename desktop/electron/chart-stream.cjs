@@ -31,7 +31,7 @@ function createChartStreams({emit,Socket=globalThis.WebSocket,now=Date.now,timer
  function start(id,input){
   if(typeof id!=='string'||!/^[a-z0-9-]{1,80}$/i.test(id))throw Error('Invalid stream identifier.');
   const c=config(input);if(c.venue==='reference')throw Error('Daily reference charts do not provide live streams.');
-  stop(id);if(streams.size>=4)throw Error('Too many live charts.');
+  stop(id);if(streams.size>=16)throw Error('Too many live charts.');
   const s={closed:false,socket:null,retry:null,watch:null,attempt:0,last:0,packet:0,opened:0,latest:0,bar:null,trade:null};streams.set(id,s);
   const send=v=>{if(!s.closed)emit(id,v)};
   if(c.venue==='goldapi'){
@@ -67,4 +67,4 @@ function createChartStreams({emit,Socket=globalThis.WebSocket,now=Date.now,timer
  }
  return{start,stop,stopAll:()=>[...streams.keys()].forEach(stop)};
 }
-module.exports={createChartStreams,parse,trade,overlayTrade,endpoint,intervalName};
+module.exports={createChartStreams:options=>require('./shared-chart-streams.cjs').sharedStreams(createChartStreams,options),parse,trade,overlayTrade,endpoint,intervalName};

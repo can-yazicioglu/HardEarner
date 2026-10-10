@@ -24,7 +24,7 @@ test('Heartbeat detects stalled data, sends OKX ping and closes abandoned connec
  const h=harness();h.service.start('two',{...c,venue:'okx'});const s=h.sockets[0];s.fire('open');assert.equal(JSON.parse(s.sent).args[0].channel,'candle1m');h.advance(10000);[...h.intervals][0]();assert.equal(s.sent,'ping');h.advance(10000);[...h.intervals][0]();assert.equal(h.events.at(-1).status,'delayed');h.advance(20000);[...h.intervals][0]();assert.equal(h.timeouts.size,1);h.service.stop('two');assert.equal(h.timeouts.size,0);
 });
 test('Stream subscriptions reject reference feeds, arbitrary identifiers and excess consumers',()=>{
- const h=harness();assert.throws(()=>h.service.start('../evil',c));assert.throws(()=>h.service.start('fx',{...c,venue:'reference',type:'cash',asset:'GBP'}));for(let i=0;i<4;i++)h.service.start('chart-'+i,c);assert.throws(()=>h.service.start('fifth',c));h.service.stopAll();assert.equal(h.intervals.size,0);
+ const h=harness();assert.throws(()=>h.service.start('../evil',c));assert.throws(()=>h.service.start('fx',{...c,venue:'reference',type:'cash',asset:'GBP'}));for(let i=0;i<32;i++)h.service.start('chart-'+i,c);assert.equal(h.sockets.length,1);assert.throws(()=>h.service.start('excess',c));h.service.stopAll();assert.equal(h.intervals.size,0);
 });
 
 test('Trade stream changes the candle between kline snapshots, rejects duplicate trades and preserves volume',()=>{

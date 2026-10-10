@@ -756,5 +756,80 @@
   },
   "Glassnode API access for SOPR": {
     "tr": "SOPR için Glassnode API erişimi"
+  },
+  "Self Analysis opens a dedicated Research window or tab. Research Lab contains your dashboard, tools, education and setup list; the existing Overview, Charts, Screener, News, Notes and Alerts stay available. Open it from an unlocked portfolio to continue without a second password. A direct link or a refreshed web tab still needs your vault password. Lock vault locks all open tabs for this account.": {
+    "tr": "Kendi Analizim ayrı bir Araştırma penceresi veya sekmesi açar. Research Lab içinde panon, araçlar, eğitim ve kurulum listesi vardır; mevcut Genel bakış, Grafikler, Tarayıcı, Haberler, Notlar ve Uyarılar korunur. Kilidi açık portföyden açarsan ikinci şifre sorulmaz. Doğrudan bağlantı veya yenilenmiş web sekmesi kasa şifresi ister. Kasayı kilitle, bu hesabın açık sekmelerini birlikte kilitler."
+  },
+  "Build your Research Lab": {
+    "tr": "Araştırma panonu kur"
+  },
+  "Open Research Lab → My dashboard. Start with three cards or choose a template, add only useful widgets, drag them to reorder, or use the arrow and width buttons. Save named dashboards. Desktop and phone arrangements are independent; Import / Export layouts contains presentation settings, not your keys or holdings. Tool library searches all 44 entries. Setup needed identifies deferred datasets.": {
+    "tr": "Research Lab → Panom yolunu aç. Üç kartla veya bir şablonla başla, yalnızca işine yarayan bileşenleri ekle. Sürükleyerek ya da ok ve genişlik düğmeleriyle düzenle; panona bir ad ver. Telefon ve masaüstü düzenleri ayrıdır. Düzenleri içe/dışa aktarma, anahtarları veya birikimleri içermez. Araç kütüphanesinde 44 başlık aranabilir; Kurulum gerekenler eksik veri erişimlerini gösterir."
+  },
+  "Compare context before conclusions": {
+    "tr": "Sonuçtan önce bağlamı karşılaştır"
+  },
+  "ALT/BTC radar compares asset returns with Bitcoin, not just their difference. Check covered versus missing assets and the rolling period. Cycle bands use completed USD candles and are historical references. Fee, protocol revenue and holder-revenue tables are different measures. SEC 13F values describe a reported quarter; new disclosures and share changes are not proof of a live trade.": {
+    "tr": "ALT/BTC radarı, varlığın Bitcoin karşısındaki göreli getirisini hesaplar. Kapsanan/eksik varlıkları ve dönemi kontrol et. Döngü bantları tamamlanmış USD mumlarından üretilen tarihsel referanslardır. İşlem ücreti, protokol geliri ve sahip geliri farklı ölçülerdir. SEC 13F verisi bildirilen çeyreği anlatır; yeni bildirim veya hisse miktarı değişimi canlı bir işlem kanıtı değildir."
+  },
+  "Use the scenario tools": {
+    "tr": "Senaryo araçlarını kullan"
+  },
+  "Options laboratory shows Deribit OI and IV. Select one expiry for max pain and skew; expand Greeks for model details. Signed gamma is an explicit scenario, not observed dealer exposure. DCA uses real historical prices, entered fees and dated TRY/EUR exchange rates; it compares equal capital invested on day one. Position sizing depends on your stop and risk estimate; stops can slip. None of these tools places an order.": {
+    "tr": "Opsiyon laboratuvarı Deribit OI ve IV verisini gösterir. Max pain ve skew için tek vade seç; model ayrıntıları için Yunanları aç. İşaretli gamma bir senaryodur, gözlenen dealer riski değildir. DCA geçmiş fiyat, girdiğin ücret ve tarihli TRY/EUR kurlarıyla hesaplanır; aynı sermayenin ilk gün yatırılmasıyla karşılaştırılır. Pozisyon büyüklüğü stopuna ve risk girdine bağlıdır; stop kayabilir. Bu araçlar emir göndermez."
+  },
+  "Choose your appearance and chart layout": {
+    "tr": "Görünümünü ve grafik düzenini seç"
+  },
+  "The sun/moon button at the top right switches black and light themes. Charts supports 1, 2 horizontal, 2 vertical, 3, 4, 6 and 8 panels, saved layouts, duplication, resizing and focus. Symbol, interval and visible time-range synchronization are optional. Offscreen panels pause streams. Research Lab → Learn FAST contains seven starter steps and 27 short concepts. Reduced-motion preferences are respected.": {
+    "tr": "Sağ üstteki güneş/ay düğmesi siyah ve açık tema arasında geçiş yapar. Grafiklerde 1, yatay/dikey 2, 3, 4, 6 ve 8 panel; kayıtlı düzen, kopyalama, boyutlandırma ve odaklama bulunur. Sembol, zaman aralığı ve görünen tarih aralığı isteğe bağlı eşitlenir. Ekran dışındaki paneller akışı duraklatır. Research Lab → Hızlı öğren içinde yedi başlangıç adımı ve 27 kısa kavram var. Azaltılmış hareket tercihi korunur."
+  },
+  "Layout": {
+    "tr": "Düzen"
+  },
+  "Chart layout": {
+    "tr": "Grafik düzeni"
+  },
+  "2 · side by side": {
+    "tr": "2 · yan yana"
+  },
+  "2 · stacked": {
+    "tr": "2 · alt alta"
+  },
+  "charts": {
+    "tr": "grafik"
+  },
+  "Sync symbol": {
+    "tr": "Sembolü eşitle"
+  },
+  "Sync interval": {
+    "tr": "Zaman aralığını eşitle"
+  },
+  "Sync range": {
+    "tr": "Görünen tarihi eşitle"
+  },
+  "Layout name": {
+    "tr": "Düzen adı"
+  },
+  "Save layout": {
+    "tr": "Düzeni kaydet"
+  },
+  "Saved layouts": {
+    "tr": "Kayıtlı düzenler"
+  },
+  "Move chart left": {
+    "tr": "Grafiği sola taşı"
+  },
+  "Duplicate": {
+    "tr": "Kopyala"
+  },
+  "Resize": {
+    "tr": "Boyutlandır"
+  },
+  "Maximize chart": {
+    "tr": "Grafiği büyüt"
+  },
+  "Chart paused outside the visible workspace.": {
+    "tr": "Görünür alan dışındaki grafik duraklatıldı."
   }
 }

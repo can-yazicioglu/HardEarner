@@ -1,0 +1,6 @@
+// Binance documented snapshot + diff sequence rules. Gaps invalidate the book.
+function createBook(){let id=null,valid=false;const bids=new Map(),asks=new Map();
+ function put(map,rows){if(!Array.isArray(rows))throw Error('Invalid depth rows.');for(const [p,q]of rows){const price=Number(p),quantity=Number(q);if(!Number.isFinite(price)||price<=0||!Number.isFinite(quantity)||quantity<0)throw Error('Invalid depth level.');if(quantity===0)map.delete(price);else map.set(price,quantity)}}
+ return{snapshot(d){if(!Number.isSafeInteger(d?.lastUpdateId))throw Error('Invalid snapshot sequence.');bids.clear();asks.clear();put(bids,d.bids);put(asks,d.asks);id=d.lastUpdateId;valid=true;},update(d){if(!valid)return false;if(!Number.isSafeInteger(d?.U)||!Number.isSafeInteger(d?.u)||d.U>d.u){valid=false;return false}if(d.u<=id)return true;if(d.U>id+1){valid=false;return false}try{put(bids,d.b);put(asks,d.a)}catch{valid=false;return false}id=d.u;return true},view(limit=100){return{valid,lastUpdateId:id,bids:[...bids].sort((a,b)=>b[0]-a[0]).slice(0,limit),asks:[...asks].sort((a,b)=>a[0]-b[0]).slice(0,limit)}},invalidate(){valid=false},reset(){id=null;valid=false;bids.clear();asks.clear()}};
+}
+module.exports={createBook};

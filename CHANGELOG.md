@@ -1,5 +1,17 @@
 # Changes
 
+## 2.16.0 — Research Lab and a calmer workspace
+
+- Add saved desktop/mobile dashboards, a 44-entry tool library, 38 optional widget definitions, seven starter templates, encrypted notebooks and a guided learning path. Catalogue entries include explicit setup states, not a claim that every integration is live.
+- Add 1–8 saved chart layouts with synchronization and shared streams; preserve drawings, execution markers and existing workflows.
+- Add relative-performance, cycle, return, options, sequenced order-book, SEC, DeFi/yield and flow research with source/time/unit labels, scenario calculators and supported metric alerts.
+- Add documented FRED, FMP and DefiLlama Pro routes and expand the remaining-access list. No paid subscription is purchased or missing data fabricated.
+- Make black the default, add a top-right light-theme control and reduced-motion-aware transitions, retaining Cherry Red accents.
+- Open Research from an unlocked parent without a second password through an exact-origin, one-use in-memory handoff. Explicit lock still locks related tabs; direct visits and refreshes require unlock.
+- Update Learn FAST and document feature-by-feature coverage, calculations and remaining implementation.
+
+Desktop, private web and source use 2.16.0. Store certification and installation remain separate stages. See [verification](docs/releases/2.16.0.md).
+
 ## 2.15.0 — Market intelligence, in Cherry Red
 
 - Extend Research with optional funding, open interest, observed liquidations, whale activity, ETF flows and on-chain valuation panels. Reuse asset search, favourites and charts without changing portfolio calculations.

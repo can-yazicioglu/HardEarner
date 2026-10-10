@@ -33,7 +33,7 @@ async function build(){
   <Properties><DisplayName>HardEarner</DisplayName><PublisherDisplayName>${xml(identity.publisherDisplayName)}</PublisherDisplayName><Description>Track savings, connected balances and market charts.</Description><Logo>StoreAssets\\StoreLogo.png</Logo></Properties>
   <Dependencies><TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26200.0" /></Dependencies>
   <Resources>${['en-GB','tr-TR','es-ES','ru-RU','fr-FR','de-DE'].map(l=>`<Resource Language="${l}" />`).join('')}</Resources>
-  <Applications><Application Id="${xml(identity.applicationId)}" Executable="HardEarner.exe" uap10:RuntimeBehavior="packagedClassicApp" uap10:TrustLevel="mediumIL"><uap:VisualElements DisplayName="HardEarner" Description="Hard-Earned Money needs attention." BackgroundColor="#181012" Square44x44Logo="StoreAssets\\Square44x44Logo.png" Square150x150Logo="StoreAssets\\Square150x150Logo.png" /></Application></Applications>
+  <Applications><Application Id="${xml(identity.applicationId)}" Executable="HardEarner.exe" uap10:RuntimeBehavior="packagedClassicApp" uap10:TrustLevel="mediumIL"><uap:VisualElements DisplayName="HardEarner" Description="Hard-Earned Money needs attention." BackgroundColor="#09090b" Square44x44Logo="StoreAssets\\Square44x44Logo.png" Square150x150Logo="StoreAssets\\Square150x150Logo.png" /></Application></Applications>
   <Capabilities><rescap:Capability Name="runFullTrust" /></Capabilities>
 </Package>`;
  fs.writeFileSync(path.join(payload,'AppxManifest.xml'),manifest);
