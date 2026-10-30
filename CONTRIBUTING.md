@@ -1,8 +1,8 @@
 # Working on HardEarner
 
-This is a private, proprietary project. Repository access does not grant permission to redistribute its source or branding.
+This is a proprietary project with publicly viewable source. Repository access does not grant permission to redistribute its source or branding.
 
-Start with [development](docs/development.md), [architecture](docs/architecture.md) and [integration scope](docs/integrations.md). Keep the navy interface calm: make financial evidence and next actions clear, and avoid displaying unsupported capabilities as available.
+Start with [development](docs/development.md), [architecture](docs/architecture.md) and [integration scope](docs/integrations.md). Keep the interface calm: make financial evidence and next actions clear, and avoid displaying unsupported capabilities as available.
 
 For changes, use a branch and a pull request. Explain the user-visible problem, the resulting behaviour and the checks run. Use precise fixture tests for accounting, security and persistence changes; include sample-data screenshots when the UI changes.
 
