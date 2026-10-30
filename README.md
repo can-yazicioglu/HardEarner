@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/media/banner.svg" alt="HardEarner — Hard-Earned Money needs attention." width="100%" /></p>
 
 <p align="center">
-  <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://img.shields.io/badge/CI-GitHub_Actions-b92d50?logo=githubactions&amp;logoColor=white" /></a>
+  <a href="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml"><img alt="Build and test" src="https://github.com/can-yazicioglu/HardEarner/actions/workflows/ci.yml/badge.svg" /></a>
   <img alt="Status: Private preview" src="https://img.shields.io/badge/status-private_preview-612137" />
   <img alt="Windows desktop 2.16.1" src="https://img.shields.io/badge/desktop-2.16.1-b92d50" />
   <img alt="Private web 2.16.1" src="https://img.shields.io/badge/web-2.16.1-b92d50" />
@@ -90,7 +90,7 @@ npm run setup
 npm run build
 ```
 
-Repository access is required because the source is private. Dependencies are installed from the two committed lockfiles.
+The source is publicly viewable under the existing proprietary [license](LICENSE); it is not open-source licensed. Dependencies are installed from the two committed lockfiles. The hosted app remains an invitation-only preview.
 
 **Windows desktop**
 
@@ -171,4 +171,4 @@ See the [roadmap](docs/roadmap.md). Payment initiation and trading would require
 
 ---
 
-**Made by Can Yazicioglu.** Private source, all rights reserved. Third-party components retain their own licenses; see [LICENSE](LICENSE). Charting by [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts).
+**Made by [Can Yazicioglu](https://canyazicioglu.com).** Publicly viewable source; proprietary software, all rights reserved. Third-party components retain their own licenses; see [LICENSE](LICENSE). Charting by [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts).
